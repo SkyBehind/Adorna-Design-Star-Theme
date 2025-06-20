@@ -1,0 +1,157 @@
+
+> vite-shadcn@0.0.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.8  ready in 103 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.10.15:5173/
+  ➜  Network: http://192.168.2.12:5173/
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+6:10:18 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+6:13:40 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+6:19:36 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+6:29:16 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+6:31:31 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+6:33:16 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+6:35:38 PM [vite] hmr update /src/components/Gallery.tsx, /src/index.css
+7:17:06 PM [vite] hmr update /src/components/LippieAndLather.tsx, /src/index.css
+7:17:06 PM [vite] Internal server error: /Users/aaronstransky/Adorna-Design/src/components/LippieAndLather.tsx: Unexpected token, expected "," (104:3)
+
+  102 |       collection: 'Tropical Escape'
+  103 |     }
+> 104 |   ];
+      |    ^
+  105 |         ]);
+  106 |       }
+  107 |     };
+  Plugin: vite:react-babel
+  File: /Users/aaronstransky/Adorna-Design/src/components/LippieAndLather.tsx:104:3
+  102|        collection: 'Tropical Escape'
+  103|      }
+  104|    ];
+     |     ^
+  105|          ]);
+  106|        }
+      at constructor (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:362:19)
+      at TypeScriptParserMixin.raise (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:3259:19)
+      at TypeScriptParserMixin.unexpected (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:3279:16)
+      at TypeScriptParserMixin.expect (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:3589:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10758:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10694:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10631:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:8992:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10604:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10595:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10576:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10556:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9483:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10410:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10415:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10392:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10355:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9432:20)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10309:23)
+      at /Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10305:39
+      at TypeScriptParserMixin.allowInAnd (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11932:16)
+      at TypeScriptParserMixin.parseExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10305:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12376:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9157:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12243:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12223:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12796:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12789:10)
+      at TypeScriptParserMixin.parseBlock (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12777:10)
+      at /Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12698:72
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11914:14)
+      at TypeScriptParserMixin.parseTryStatement (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12698:26)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12280:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9157:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12243:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12223:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12796:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12789:10)
+      at TypeScriptParserMixin.parseBlock (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12777:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11620:24)
+      at TypeScriptParserMixin.parseArrowExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11595:10)
+      at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10782:10)
+      at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9412:18)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10702:27)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10631:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:8992:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10604:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10595:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10576:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10556:23)
+7:17:25 PM [vite] hmr update /src/components/LippieAndLather.tsx, /src/index.css
+7:17:25 PM [vite] Internal server error: /Users/aaronstransky/Adorna-Design/src/components/LippieAndLather.tsx: Unexpected token, expected "," (104:3)
+
+  102 |       collection: 'Tropical Escape'
+  103 |     }
+> 104 |   ];
+      |    ^
+  105 |         ]);
+  106 |       }
+  107 |     };
+  Plugin: vite:react-babel
+  File: /Users/aaronstransky/Adorna-Design/src/components/LippieAndLather.tsx:104:3
+  102|        collection: 'Tropical Escape'
+  103|      }
+  104|    ];
+     |     ^
+  105|          ]);
+  106|        }
+      at constructor (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:362:19)
+      at TypeScriptParserMixin.raise (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:3259:19)
+      at TypeScriptParserMixin.unexpected (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:3279:16)
+      at TypeScriptParserMixin.expect (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:3589:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10758:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10694:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10631:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:8992:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10604:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10595:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10576:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10556:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9483:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10410:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10415:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10392:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10355:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9432:20)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10309:23)
+      at /Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10305:39
+      at TypeScriptParserMixin.allowInAnd (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11932:16)
+      at TypeScriptParserMixin.parseExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10305:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12376:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9157:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12243:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12223:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12796:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12789:10)
+      at TypeScriptParserMixin.parseBlock (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12777:10)
+      at /Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12698:72
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11914:14)
+      at TypeScriptParserMixin.parseTryStatement (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12698:26)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12280:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9157:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12243:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12223:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12796:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12789:10)
+      at TypeScriptParserMixin.parseBlock (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:12777:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11620:24)
+      at TypeScriptParserMixin.parseArrowExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:11595:10)
+      at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10782:10)
+      at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:9412:18)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10702:27)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10631:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:8992:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10604:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10595:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10576:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/aaronstransky/Adorna-Design/node_modules/@babel/parser/lib/index.js:10556:23)
+7:20:27 PM [vite] hmr update /src/components/LippieAndLather.tsx, /src/index.css

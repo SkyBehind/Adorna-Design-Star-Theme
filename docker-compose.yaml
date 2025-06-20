@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  adorna-design:
+    build: .
+    container_name: adorna-design-app
+    ports:
+      - "${HOST_PORT:-6464}:6464"
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    networks:
+      - adorna-network
+
+networks:
+  adorna-network:
+    driver: bridge

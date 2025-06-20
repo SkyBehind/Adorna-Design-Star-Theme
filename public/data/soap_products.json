@@ -1,0 +1,138 @@
+[
+  {
+    "id": "green_soap_purple_dish",
+    "name": "Green Soap Purple Dish",
+    "type": "soap",
+    "scent": "Eucalyptus & Mint",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Green Soap Purple Dish is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/green_soap_purple_dish.jpeg",
+    "collection": "Botanical Bliss"
+  },
+  {
+    "id": "pink_blue_decorative_soap",
+    "name": "Pink Blue Decorative Soap",
+    "type": "soap",
+    "scent": "Ocean Breeze",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Pink Blue Decorative Soap is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/pink_blue_decorative_soap.jpeg",
+    "collection": "Botanical Bliss"
+  },
+  {
+    "id": "soap_lipbalm_gift_collection",
+    "name": "Soap Lipbalm Gift Collection",
+    "type": "lip-balm",
+    "scent": "Natural Botanical Blend",
+    "ingredients": [
+      "Beeswax",
+      "Coconut Oil",
+      "Shea Butter",
+      "Vitamin E",
+      "Essential Oils"
+    ],
+    "benefits": "Deeply moisturizing and protective, made with natural oils",
+    "description": "This nourishing Soap Lipbalm Gift Collection provides long-lasting moisture and protection with a delightful scent.",
+    "image": "/images/soap_lipbalm_gift_collection.jpeg",
+    "collection": "Natural Care"
+  },
+  {
+    "id": "multicolor_artisan_soap_collection",
+    "name": "Multicolor Artisan Soap Collection",
+    "type": "soap",
+    "scent": "Natural Botanical Blend",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Multicolor Artisan Soap Collection is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/multicolor_artisan_soap_collection.jpeg",
+    "collection": "Botanical Bliss"
+  },
+  {
+    "id": "blue_white_handcrafted_soap",
+    "name": "Blue White Handcrafted Soap",
+    "type": "soap",
+    "scent": "Ocean Breeze",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Blue White Handcrafted Soap is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/blue_white_handcrafted_soap.jpeg",
+    "collection": "Botanical Bliss"
+  },
+  {
+    "id": "blue_pink_floral_soap",
+    "name": "Blue Pink Floral Soap",
+    "type": "soap",
+    "scent": "Ocean Breeze",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Blue Pink Floral Soap is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/blue_pink_floral_soap.jpeg",
+    "collection": "Botanical Bliss"
+  },
+  {
+    "id": "pink_blue_heart_soap",
+    "name": "Pink Blue Heart Soap",
+    "type": "soap",
+    "scent": "Ocean Breeze",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Pink Blue Heart Soap is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/pink_blue_heart_soap.jpeg",
+    "collection": "Botanical Bliss"
+  },
+  {
+    "id": "pink_soap_purple_molds",
+    "name": "Pink Soap Purple Molds",
+    "type": "soap",
+    "scent": "Rose & Geranium",
+    "ingredients": [
+      "Olive Oil",
+      "Coconut Oil",
+      "Shea Butter",
+      "Essential Oils",
+      "Natural Colorants"
+    ],
+    "benefits": "Moisturizing and nourishing, made with all-natural ingredients",
+    "description": "Handcrafted small-batch soap made with love and care. The Pink Soap Purple Molds is perfect for daily use and makes a beautiful gift.",
+    "image": "/images/pink_soap_purple_molds.jpeg",
+    "collection": "Botanical Bliss"
+  }
+]
