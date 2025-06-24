@@ -22,14 +22,8 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000,
-    // Enable gzip compression
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    // Enable minification (fallback to esbuild if terser unavailable)
+    minify: 'esbuild',
   },
   server: {
     cors: true,
