@@ -21,6 +21,7 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [activeContentSection, setActiveContentSection] = useState<'jewelry' | 'lippie' | 'about' | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   // Remove preview index state - we'll show all images in a scrollable container
 
   const carouselSections: CarouselSection[] = [
@@ -132,6 +133,44 @@ function App() {
     }
   };
 
+  // Preload critical images for better mobile performance
+  useEffect(() => {
+    const preloadImages = () => {
+      const criticalImages = [
+        ...carouselSections.map(section => section.image),
+        ...carouselSections.flatMap(section => section.previewImages.slice(0, 3)), // Only preload first 3 preview images
+        '/images/adorna_design_logo.svg'
+      ];
+
+      let loadedCount = 0;
+      const totalImages = criticalImages.length;
+
+      criticalImages.forEach((src) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+        img.onerror = () => {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+        img.src = src;
+      });
+
+      // Fallback timeout to ensure app loads even if some images fail
+      setTimeout(() => {
+        setImagesLoaded(true);
+      }, 5000);
+    };
+
+    preloadImages();
+  }, []);
+
   // Auto-advance carousel - DISABLED
   // useEffect(() => {
   //   if (showContent) return;
@@ -179,6 +218,30 @@ function App() {
   // }, [showContent]);
 
   // No need for complex preview logic - just show all images in scrollable container
+
+  // Show loading screen on mobile while images load
+  if (!imagesLoaded) {
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+        <div className="text-center space-y-6 px-4">
+          <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto">
+            <img 
+              src="/images/adorna_design_logo.svg" 
+              alt="Adorna Design" 
+              className="w-full h-full opacity-80 brightness-0 invert animate-pulse"
+            />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-white">Adorna Design</h1>
+            <p className="text-white/70 text-sm sm:text-base">Loading beautiful handcrafted art...</p>
+          </div>
+          <div className="w-16 h-1 bg-white/20 rounded-full mx-auto overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (showContent && activeContentSection) {
     const ContentComponent = carouselSections.find(s => s.id === activeContentSection)?.component;
@@ -348,7 +411,8 @@ function App() {
                             src={image} 
                             alt={`${currentSlide.title} preview ${index + 1}`}
                             className="w-full h-full object-cover"
-                            loading="lazy"
+                            loading={index < 3 ? "eager" : "lazy"}
+                            decoding="async"
                           />
                         </div>
                       ))}

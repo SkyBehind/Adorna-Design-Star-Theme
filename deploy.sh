@@ -67,24 +67,45 @@ cleanup_docker() {
 # Main deployment function
 deploy_application() {
     local port=$1
+    local deploy_type=$2
     
-    print_status "Starting deployment on port $port..."
-    
-    # Create .env file for docker-compose
-    echo "HOST_PORT=$port" > .env
-    
-    # Build and start the container
-    print_status "Building Docker image..."
-    docker compose build
-    
-    print_status "Starting Adorna Design application..."
-    if docker compose up -d; then
-        print_success "Container started successfully"
+    if [ "$deploy_type" = "2" ]; then
+        print_status "Starting PRODUCTION deployment on port $port..."
+        
+        # Create .env file for docker-compose
+        echo "HOST_PORT=$port" > .env
+        echo "DOCKERFILE=Dockerfile.prod" >> .env
+        
+        # Build and start the container using production Dockerfile
+        print_status "Building optimized production Docker image..."
+        docker build -f Dockerfile.prod -t adorna-design-prod .
+        
+        print_status "Starting Adorna Design application (Production)..."
+        if docker run -d --name adorna-design-app -p $port:80 --restart unless-stopped adorna-design-prod; then
+            print_success "Production container started successfully"
+        else
+            print_error "Failed to start production container"
+            exit 1
+        fi
     else
-        print_error "Failed to start container"
-        print_status "Container logs:"
-        docker compose logs --tail=20
-        exit 1
+        print_status "Starting DEVELOPMENT deployment on port $port..."
+        
+        # Create .env file for docker-compose
+        echo "HOST_PORT=$port" > .env
+        
+        # Build and start the container
+        print_status "Building Docker image..."
+        docker compose build
+        
+        print_status "Starting Adorna Design application..."
+        if docker compose up -d; then
+            print_success "Container started successfully"
+        else
+            print_error "Failed to start container"
+            print_status "Container logs:"
+            docker compose logs --tail=20
+            exit 1
+        fi
     fi
     
     # Wait a moment for the container to start
@@ -144,20 +165,43 @@ main() {
     # Stop any existing container
     stop_existing_container
     
+    # Get deployment type
+    echo ""
+    print_status "Choose deployment type:"
+    echo "  1) Development (hot reload, slower but includes all features)"
+    echo "  2) Production (optimized, faster loading, static build)"
+    echo ""
+    read -p "Enter choice (1 or 2, default: 1): " deploy_type
+    
+    if [ -z "$deploy_type" ]; then
+        deploy_type=1
+    fi
+
     # Get port from user
     while true; do
         echo ""
-        print_status "Please choose a port for the Adorna Design application:"
-        echo "  • Port range: 1024-65535"
-        echo "  • Default: 6464"
-        echo "  • Common alternatives: 6465, 8080, 8081, 9000"
-        echo ""
-        read -p "Enter port number (or press Enter for 6464): " user_port
-        
-        # Use default port if none provided
-        if [ -z "$user_port" ]; then
-            user_port=6464
+        if [ "$deploy_type" = "2" ]; then
+            print_status "Please choose a port for the Adorna Design application (Production):"
+            echo "  • Port range: 1024-65535"
+            echo "  • Default: 80 (recommended for production)"
+            echo "  • Alternatives: 8080, 8081, 9000"
+            echo ""
+            read -p "Enter port number (or press Enter for 80): " user_port
+            if [ -z "$user_port" ]; then
+                user_port=80
+            fi
+        else
+            print_status "Please choose a port for the Adorna Design application (Development):"
+            echo "  • Port range: 1024-65535"
+            echo "  • Default: 6464"
+            echo "  • Common alternatives: 6465, 8080, 8081, 9000"
+            echo ""
+            read -p "Enter port number (or press Enter for 6464): " user_port
+            if [ -z "$user_port" ]; then
+                user_port=6464
+            fi
         fi
+        
         
         # Validate port number
         if ! validate_port "$user_port"; then
@@ -192,7 +236,7 @@ main() {
     read -p "Proceed with deployment? (y/n): " confirm
     
     if [[ $confirm =~ ^[Yy]$ ]]; then
-        deploy_application "$user_port"
+        deploy_application "$user_port" "$deploy_type"
         cleanup_docker
     else
         print_status "Deployment cancelled."

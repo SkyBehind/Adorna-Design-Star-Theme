@@ -14,7 +14,7 @@ dist
 Thumbs.db
 screenshots
 scripts
-public/images/compressed
+# public/images/compressed - KEEP IMAGES FOR DOCKER
 *.md
 docker-compose.yaml
 Dockerfile
