@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Gallery from './components/Gallery';
 import About from './components/About';
 import LippieAndLather from './components/LippieAndLather';
@@ -21,7 +21,7 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [activeContentSection, setActiveContentSection] = useState<'jewelry' | 'lippie' | 'about' | null>(null);
-  const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
+  // Remove preview index state - we'll show all images in a scrollable container
 
   const carouselSections: CarouselSection[] = [
     {
@@ -34,22 +34,16 @@ function App() {
       textColor: 'text-white',
       component: Gallery,
       previewImages: [
-        '/images/silver_spiral_blue_stone_earrings.jpg',
-        '/images/gold_pink_white_earrings.jpg',
-        '/images/dragonfly_black_silver_earrings.jpg',
-        '/images/brown_leather_white_bead_earrings.jpg',
-        '/images/circle_gold_earrings.jpg',
-        '/images/silver_copper_teardrop_earrings.jpg',
-        '/images/purple_silver_earrings.jpg',
-        '/images/seashell_pink_white_earrings.jpg',
-        '/images/unique_earrings_earrings.jpg',
-        '/images/wooden_bead_metal_earrings.jpg',
-        '/images/copper_round_earrings.jpg',
-        '/images/red_silver_white_earrings.jpg',
-        '/images/all-earrings-4square-board.jpg',
-        '/images/earring-single-square-wood-leath-dice.jpg',
-        '/images/earrings-2square-shells-leather.jpg',
-        '/images/earrings-single-square-cards.jpg'
+        '/images/compressed/bead_black_brown_orange_white_earrings.jpg',
+        '/images/compressed/bead_blue_silver_earrings.jpg',
+        '/images/compressed/black_blue_crystal_gold_white_earrings.jpg',
+        '/images/compressed/black_gold_silver_earrings.jpg',
+        '/images/compressed/blue_silver_earrings.jpg',
+        '/images/compressed/circle_gold_earrings.jpg',
+        '/images/compressed/bead_black_purple_earrings.jpg',
+        '/images/compressed/gold_pink_white_earrings.jpg',
+        '/images/compressed/silver_earrings.jpg',
+        '/images/compressed/unique_earrings_earrings.jpg'
       ]
     },
     {
@@ -62,15 +56,15 @@ function App() {
       textColor: 'text-white',
       component: LippieAndLather,
       previewImages: [
-        '/images/blue_pink_floral_soap.jpeg',
-        '/images/multicolor_artisan_soap_collection.jpeg',
-        '/images/pink_blue_heart_soap.jpeg',
-        '/images/soap_lipbalm_gift_collection.jpeg',
-        '/images/green_soap_purple_dish.jpeg',
-        '/images/blue_white_handcrafted_soap.jpeg',
-        '/images/basket_lipbalm_soap_tins_starfish.jpeg',
-        '/images/open_soap_boxes_and_lipbalm_basket_with_shaped_soaps.jpeg',
-        '/images/stacked_soap_boxes_lippie_lather.jpeg'
+        '/images/compressed/blue_pink_floral_soap.jpeg',
+        '/images/compressed/multicolor_artisan_soap_collection.jpeg',
+        '/images/compressed/soap_lipbalm_gift_collection.jpeg',
+        '/images/compressed/basket_lipbalm_soap_tins_starfish.jpeg',
+        '/images/compressed/blue_white_handcrafted_soap.jpeg',
+        '/images/compressed/green_soap_purple_dish.jpeg',
+        '/images/compressed/open_soap_boxes_and_lipbalm_basket_with_shaped_soaps.jpeg',
+        '/images/compressed/stacked_soap_boxes_lippie_lather.jpeg',
+        '/images/compressed/pink_blue_decorative_soap.jpeg'
       ]
     },
     {
@@ -86,23 +80,24 @@ function App() {
     }
   ];
 
-  const nextSection = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSection((prev) => (prev + 1) % carouselSections.length);
-      setIsTransitioning(false);
-    }, 300);
-  };
+  // Navigation functions (commented out as they're not currently used)
+  // const nextSection = () => {
+  //   if (isTransitioning) return;
+  //   setIsTransitioning(true);
+  //   setTimeout(() => {
+  //     setCurrentSection((prev) => (prev + 1) % carouselSections.length);
+  //     setIsTransitioning(false);
+  //   }, 300);
+  // };
 
-  const prevSection = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSection((prev) => (prev - 1 + carouselSections.length) % carouselSections.length);
-      setIsTransitioning(false);
-    }, 300);
-  };
+  // const prevSection = () => {
+  //   if (isTransitioning) return;
+  //   setIsTransitioning(true);
+  //   setTimeout(() => {
+  //     setCurrentSection((prev) => (prev - 1 + carouselSections.length) % carouselSections.length);
+  //     setIsTransitioning(false);
+  //   }, 300);
+  // };
 
   const goToSection = (index: number) => {
     if (isTransitioning || index === currentSection) return;
@@ -123,18 +118,34 @@ function App() {
     setActiveContentSection(null);
   };
 
-  // Auto-advance carousel
-  useEffect(() => {
-    if (showContent) return;
-    
-    const interval = setInterval(() => {
-      if (!isTransitioning) {
-        nextSection();
-      }
-    }, 6000);
+  // Get warm backdrop colors based on current section
+  const getWarmBackdrop = (sectionId: string) => {
+    switch (sectionId) {
+      case 'jewelry':
+        return 'bg-amber-900/40'; // Warm amber for jewelry
+      case 'lippie':
+        return 'bg-emerald-800/40'; // Warm emerald for natural products
+      case 'about':
+        return 'bg-rose-900/40'; // Warm rose for personal section
+      default:
+        return 'bg-amber-900/40';
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [isTransitioning, showContent]);
+  // Auto-advance carousel - DISABLED
+  // useEffect(() => {
+  //   if (showContent) return;
+  //   
+  //   const interval = setInterval(() => {
+  //     if (!isTransitioning) {
+  //       nextSection();
+  //     }
+  //   }, 6000);
+
+  //   return () => clearInterval(interval);
+  // }, [isTransitioning, showContent]);
+
+  // No auto-rotation effects needed
 
   // Prevent browser back navigation when in content view
   useEffect(() => {
@@ -156,29 +167,18 @@ function App() {
     };
   }, [showContent]);
 
-  // Cycle through preview images every 4 seconds
-  useEffect(() => {
-    if (showContent) return;
-    
-    const interval = setInterval(() => {
-      setCurrentPreviewIndex(prev => prev + 1);
-    }, 4000);
+  // Cycle through preview images every 4 seconds - DISABLED
+  // useEffect(() => {
+  //   if (showContent) return;
+  //   
+  //   const interval = setInterval(() => {
+  //     setCurrentPreviewIndex(prev => prev + 1);
+  //   }, 4000);
 
-    return () => clearInterval(interval);
-  }, [showContent]);
+  //   return () => clearInterval(interval);
+  // }, [showContent]);
 
-  // Function to get current preview images (showing 6 at a time, cycling through all)
-  const getCurrentPreviewImages = (section: CarouselSection) => {
-    const allImages = section.previewImages;
-    const startIndex = (currentPreviewIndex * 2) % allImages.length;
-    const selectedImages = [];
-    
-    for (let i = 0; i < 6; i++) {
-      selectedImages.push(allImages[(startIndex + i) % allImages.length]);
-    }
-    
-    return selectedImages;
-  };
+  // No need for complex preview logic - just show all images in scrollable container
 
   if (showContent && activeContentSection) {
     const ContentComponent = carouselSections.find(s => s.id === activeContentSection)?.component;
@@ -270,191 +270,187 @@ function App() {
   const currentSlide = carouselSections[currentSection];
 
   return (
-    <div className="relative min-h-screen h-screen w-full overflow-hidden bg-black">
-      {/* Background Image with Parallax Effect */}
-      <div className="absolute inset-0">
+    <div className="min-h-screen w-full bg-black"> {/* Mobile-first: remove h-screen and overflow-hidden */}
+      {/* Background Section - Mobile First */}
+      <div className="relative min-h-screen flex flex-col">
+        {/* Background Image */}
         <div 
-          className={`absolute inset-0 bg-cover transition-all duration-1000 ${isTransitioning ? 'scale-110 blur-sm' : 'scale-100'}`}
+          className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
           style={{ 
             backgroundImage: `url(${currentSlide.image})`,
             backgroundPosition: currentSlide.id === 'about' ? 'center 25%' : 'center'
           }}
         />
-        <div className={`absolute inset-0 bg-gradient-to-r ${currentSlide.gradient} transition-opacity duration-1000`} />
-      </div>
+        {/* Strong overlay for mobile readability */}
+        <div className="absolute inset-0 bg-black/60 transition-opacity duration-1000" />
+        <div className={`absolute inset-0 bg-gradient-to-b ${currentSlide.gradient} transition-opacity duration-1000`} />
 
-      {/* Top Center Logo - Moved down to avoid covering images */}
-      <div className="absolute top-8 sm:top-12 md:top-16 left-1/2 transform -translate-x-1/2 z-30">
-        <div className="text-center">
-          <img 
-            src="/images/adorna_design_logo.svg" 
-            alt="Adorna Design" 
-            className={`w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-64 lg:h-64 mx-auto opacity-90 hover:opacity-100 transition-opacity ${
-              currentSlide.id === 'jewelry' ? 'sm:filter-none filter invert' : ''
-            }`}
-          />
+        {/* Header with Logo - Mobile Safe */}
+        <header className="relative z-10 pt-6 pb-4 px-4 mobile-safe-area">
+          <div className="text-center">
+            <div className={`inline-block ${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-3xl p-4 border border-white/20`}>
+              <img 
+                src="/images/adorna_design_logo.svg" 
+                alt="Adorna Design" 
+                className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto opacity-95 drop-shadow-lg brightness-0 invert"
+              />
+            </div>
+          </div>
+        </header>
+
+        {/* Desktop Navigation - Horizontal */}
+        <div className="hidden lg:block relative z-10 px-4 mb-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex justify-center space-x-4">
+              {carouselSections.map((section, index) => (
+                <button
+                  key={section.id}
+                  onClick={() => goToSection(index)}
+                  className={`group transition-all duration-500 px-6 py-4 rounded-2xl border-2 backdrop-blur-sm ${
+                    index === currentSection 
+                      ? `${getWarmBackdrop(section.id)} border-white/60` 
+                      : `${getWarmBackdrop(section.id)}/60 border-white/30 hover:${getWarmBackdrop(section.id)} hover:border-white/50`
+                  }`}
+                >
+                  <div className="text-center">
+                    <p className="text-white font-bold text-base text-shadow-strong mb-1">{section.title}</p>
+                    <p className="text-white/80 text-sm">{section.subtitle}</p>
+                  </div>
+                  <div className={`mx-auto mt-3 w-2 h-2 rounded-full transition-all duration-500 ${
+                    index === currentSection 
+                      ? 'bg-white scale-150' 
+                      : 'bg-white/50 group-hover:bg-white/80'
+                  }`} />
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
 
 
-      {/* Main Content - Positioned to avoid logo overlap */}
-      <div className="relative z-20 h-full flex items-end pb-48 sm:pb-52 lg:pb-20 pt-24 sm:pt-32 md:pt-40 lg:pt-48">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 w-full">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Left Content */}
-            <div className={`space-y-8 transition-all duration-1000 ${isTransitioning ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0'}`}>
-              <div className="space-y-6">
-                
+        {/* Main Content - Mobile First Layout */}
+        <main className="relative z-10 flex-1 pb-24 px-4 sm:px-6 lg:px-8 mobile-safe-area">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col lg:grid lg:grid-cols-5 gap-8 lg:gap-12 min-h-[60vh] justify-center">
+              {/* Preview Images Grid - Mobile Optimized (moved to left side) */}
+              <div className="lg:col-span-2 space-y-6 lg:order-1">
+                {currentSlide.previewImages.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-white font-bold text-base sm:text-lg text-shadow-strong">Gallery Preview</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                      {/* Show first 5 images on mobile for better layout */}
+                      {currentSlide.previewImages.slice(0, 5).map((image, index) => (
+                        <div 
+                          key={`${currentSlide.id}-${index}`}
+                          className="aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-white/30"
+                        >
+                          <img 
+                            src={image} 
+                            alt={`${currentSlide.title} preview ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                      {/* See More Button - Large Touch Target */}
+                      <button
+                        onClick={() => enterSection(currentSlide.id)}
+                        className={`aspect-square rounded-xl ${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm border-2 border-white/70 border-dashed flex flex-col items-center justify-center transition-all duration-300 hover:${getWarmBackdrop(currentSlide.id)}/80 hover:border-white active:scale-95 min-h-[100px] sm:min-h-[120px]`}
+                      >
+                        <div className="text-white text-center p-2">
+                          <div className="text-xl sm:text-2xl mb-1 font-bold">+</div>
+                          <div className="text-xs sm:text-sm font-bold leading-tight">
+                            {currentSlide.id === 'jewelry' ? 'See All' : currentSlide.id === 'lippie' ? 'Shop All' : 'Learn More'}
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Main Action Button - Mobile Optimized */}
+                <div className="pt-4">
+                  <button
+                    onClick={() => enterSection(currentSlide.id)}
+                    className={`w-full group relative overflow-hidden ${getWarmBackdrop(currentSlide.id)} backdrop-blur-xl border-2 border-white/60 rounded-2xl px-6 py-4 sm:py-5 text-white font-bold transition-all duration-300 hover:${getWarmBackdrop(currentSlide.id)}/80 hover:border-white active:scale-95 text-base sm:text-lg min-h-[60px] shadow-xl`}
+                  >
+                    <span className="relative z-10 text-shadow-strong">{currentSlide.id === 'about' ? 'Meet the Artist' : 'Explore Full Collection'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Content Section - Mobile Optimized (moved to right side) */}
+              <div className="lg:col-span-3 space-y-6 text-center lg:text-right lg:order-2">
+                {/* Title Section with Better Contrast */}
                 <div className="space-y-4">
-                  <h2 className={`text-xl sm:text-2xl md:text-3xl font-medium ${currentSlide.textColor} leading-tight tracking-wide`}>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-shadow-strong leading-tight">
                     {currentSlide.title}
+                  </h1>
+                  <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 text-shadow-strong font-medium">
+                    {currentSlide.subtitle}
                   </h2>
                 </div>
                 
-                <p className={`text-base sm:text-lg ${currentSlide.textColor}/70 leading-relaxed max-w-2xl`}>
-                  {currentSlide.description}
-                </p>
-              </div>
-
-              {/* Preview Images Carousel */}
-              {currentSlide.previewImages.length > 0 && (
-                <div className="pt-4">
-                  <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
-                    {getCurrentPreviewImages(currentSlide).map((image, index) => (
-                      <div 
-                        key={`${currentPreviewIndex}-${index}`}
-                        className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                      >
-                        <img 
-                          src={image} 
-                          alt={`Preview ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
+                {/* Description with Strong Background */}
+                <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/20`}>
+                  <p className="text-sm sm:text-base lg:text-lg text-white leading-relaxed">
+                    {currentSlide.description}
+                  </p>
                 </div>
-              )}
-
-              {/* Enter Button - Hidden on Mobile */}
-              <div className="pt-4 hidden lg:block">
-                <button
-                  onClick={() => enterSection(currentSlide.id)}
-                  className="group relative overflow-hidden bg-white/10 backdrop-blur-xl border border-white/30 rounded-full px-6 py-3 sm:px-8 sm:py-4 text-white font-medium transition-all duration-500 hover:bg-white/20 hover:scale-105 hover:shadow-2xl text-sm sm:text-base"
-                >
-                  <span className="relative z-10">{currentSlide.id === 'about' ? 'About Gina' : 'See Portfolio'}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                </button>
-              </div>
-            </div>
-
-            {/* Navigation dots only */}
-            <div className="hidden lg:flex justify-end">
-              <div className="space-y-4">
-                {carouselSections.map((section, index) => (
-                  <button
-                    key={section.id}
-                    onClick={() => enterSection(section.id)}
-                    className={`group flex items-center space-x-3 transition-all duration-500 ${
-                      index === currentSection 
-                        ? 'opacity-100' 
-                        : 'opacity-40 hover:opacity-70'
-                    }`}
-                  >
-                    <div className="text-right">
-                      <p className="text-white font-medium text-sm">{section.title}</p>
+                
+                {/* Ingredients for Lippie & Lather - Mobile Optimized */}
+                {currentSlide.id === 'lippie' && (
+                  <div className="space-y-3">
+                    <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/30`}>
+                      <h3 className="text-white font-bold text-sm sm:text-base mb-3 flex items-center lg:justify-end">
+                        <span className="w-3 h-3 sm:w-4 sm:h-4 bg-emerald-400 rounded-full mr-3 lg:ml-3 lg:mr-0 lg:order-2"></span>
+                        <span className="lg:order-1">Natural Soap Ingredients</span>
+                      </h3>
+                      <p className="text-white text-sm sm:text-base leading-relaxed">
+                        Goat's Milk • Coconut Oil • Cosmetic Grade Tint • Cosmetic Grade Fragrances • Natural Dried Herbs
+                      </p>
                     </div>
-                    <div className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-500 ${
-                      index === currentSection 
-                        ? 'bg-white scale-125' 
-                        : 'bg-transparent group-hover:bg-white/50'
-                    }`} />
-                  </button>
-                ))}
+                    <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/30`}>
+                      <h3 className="text-white font-bold text-sm sm:text-base mb-3 flex items-center lg:justify-end">
+                        <span className="w-3 h-3 sm:w-4 sm:h-4 bg-amber-400 rounded-full mr-3 lg:ml-3 lg:mr-0 lg:order-2"></span>
+                        <span className="lg:order-1">Lip Balm Ingredients</span>
+                      </h3>
+                      <p className="text-white text-sm sm:text-base leading-relaxed">
+                        Beeswax • Coconut Oil • Shea Butter • Food Grade Flavoring
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
+
+
             </div>
           </div>
-        </div>
-      </div>
+        </main>
 
-      {/* Navigation Controls */}
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-        {/* Desktop Navigation - Dots Only */}
-        <div className="hidden lg:flex items-center space-x-3 sm:space-x-6">
-          {/* Progress Dots */}
-          <div className="flex space-x-2 sm:space-x-3">
-            {carouselSections.map((section, index) => (
-              <button
-                key={index}
-                onClick={() => goToSection(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-500 ${
-                  index === currentSection 
-                    ? 'bg-white w-8' 
-                    : 'bg-white/40 hover:bg-white/60'
-                }`}
-              />
-            ))}
+        {/* Mobile Navigation - Fixed Bottom with Safe Area */}
+        <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 mobile-safe-area">
+          <div className={`${getWarmBackdrop(currentSlide.id)}/95 backdrop-blur-xl border-t-2 border-white/30 shadow-2xl`}>
+            <div className="grid grid-cols-3 gap-1 p-3">
+              {carouselSections.map((section, index) => (
+                <button
+                  key={section.id}
+                  onClick={() => goToSection(index)}
+                  className={`p-4 rounded-2xl text-center transition-all duration-300 min-h-[72px] flex flex-col justify-center border-2 ${
+                    index === currentSection 
+                      ? 'bg-white text-black shadow-xl border-white' 
+                      : `${getWarmBackdrop(section.id)}/50 text-white hover:bg-white/20 active:scale-95 border-white/30`
+                  }`}
+                >
+                  <div>
+                    <p className="font-bold text-sm leading-tight">{section.title}</p>
+                    <p className="text-xs opacity-75 mt-1">Tap to explore</p>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-
-        {/* Mobile Navigation - Dots with Arrows */}
-        <div className="flex lg:hidden items-center space-x-3 sm:space-x-6">
-          {/* Progress Dots with Navigation Arrows */}
-          <div className="flex space-x-2 sm:space-x-3 items-center">
-            {carouselSections.map((section, index) => (
-              <button
-                key={index}
-                onClick={() => index === 0 ? prevSection() : index === carouselSections.length - 1 ? nextSection() : goToSection(index)}
-                disabled={isTransitioning}
-                className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all duration-500 flex items-center justify-center shadow-lg ${
-                  index === currentSection 
-                    ? 'bg-white' 
-                    : 'bg-white/60 hover:bg-white/80'
-                }`}
-              >
-                {/* Left Arrow for first dot */}
-                {index === 0 && (
-                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-800" />
-                )}
-                {/* Right Arrow for last dot */}
-                {index === carouselSections.length - 1 && (
-                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-800" />
-                )}
-                {/* Center dot for middle */}
-                {index !== 0 && index !== carouselSections.length - 1 && (
-                  <div className={`w-3 h-3 rounded-full ${
-                    index === currentSection ? 'bg-slate-800' : 'bg-slate-600'
-                  }`} />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-
-      {/* Mobile Navigation */}
-      <div className="lg:hidden absolute bottom-20 sm:bottom-24 left-4 right-4 sm:left-8 sm:right-8 z-30">
-        <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-3 sm:p-4 shadow-2xl">
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
-            {carouselSections.map((section, index) => (
-              <button
-                key={section.id}
-                onClick={() => enterSection(section.id)}
-                className={`p-2 sm:p-3 rounded-xl text-center transition-all duration-300 ${
-                  index === currentSection 
-                    ? 'bg-white text-slate-900 shadow-lg' 
-                    : 'bg-slate-800/50 text-white hover:bg-slate-700/70 hover:shadow-md'
-                }`}
-              >
-                <div>
-                  <p className="font-medium text-xs leading-tight">{section.title}</p>
-                  <p className="text-xs opacity-75 mt-1">tap</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
+        </nav>
       </div>
     </div>
   );

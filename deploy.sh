@@ -75,13 +75,20 @@ deploy_application() {
     
     # Build and start the container
     print_status "Building Docker image..."
-    docker compose build --no-cache
+    docker compose build
     
     print_status "Starting Adorna Design application..."
-    docker compose up -d
+    if docker compose up -d; then
+        print_success "Container started successfully"
+    else
+        print_error "Failed to start container"
+        print_status "Container logs:"
+        docker compose logs --tail=20
+        exit 1
+    fi
     
     # Wait a moment for the container to start
-    sleep 3
+    sleep 5
     
     # Check if container is running
     if docker ps -q -f name=adorna-design-app | grep -q .; then

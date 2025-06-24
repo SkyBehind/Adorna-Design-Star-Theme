@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Search, Layers, Eye, Sparkles, Calendar, Palette } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Search, Sparkles } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { loadEarrings } from '../utils/loadEarrings';
 
@@ -29,18 +28,18 @@ export default function Gallery() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
 
-  // Helper function to organize artworks into collections
-  const getCollectionFromMaterial = (material: string): string => {
-    if (!material) return 'Signature Collection';
-    
-    material = material.toLowerCase();
-    if (material.includes('bead') || material.includes('pearl')) return 'Beaded Collection';
-    if (material.includes('silver') && (material.includes('wire') || material.includes('metal'))) return 'Silver Series';
-    if (material.includes('copper') || material.includes('brass')) return 'Signature Collection';
-    if (material.includes('wood') || material.includes('leather') || material.includes('shell') || material.includes('seashell')) return 'Natural Elements';
-    
-    return 'Signature Collection';
-  };
+  // Helper function to organize artworks into collections (commented out as not currently used)
+  // const getCollectionFromMaterial = (material: string): string => {
+  //   if (!material) return 'Signature Collection';
+  //   
+  //   material = material.toLowerCase();
+  //   if (material.includes('bead') || material.includes('pearl')) return 'Beaded Collection';
+  //   if (material.includes('silver') && (material.includes('wire') || material.includes('metal'))) return 'Silver Series';
+  //   if (material.includes('copper') || material.includes('brass')) return 'Signature Collection';
+  //   if (material.includes('wood') || material.includes('leather') || material.includes('shell') || material.includes('seashell')) return 'Natural Elements';
+  //   
+  //   return 'Signature Collection';
+  // };
 
   useEffect(() => {
     const fetchArtworks = async () => {

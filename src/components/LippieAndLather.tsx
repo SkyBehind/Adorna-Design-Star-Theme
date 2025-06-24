@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Droplets, Leaf, Heart, Sparkles, Search, Filter } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Heart, Search } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 interface Product {

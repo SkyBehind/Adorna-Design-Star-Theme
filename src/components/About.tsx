@@ -1,4 +1,4 @@
-import { Heart, Stethoscope, Palette, Leaf, Clock, Award, Lightbulb, Users, Target, Home, Eye } from 'lucide-react';
+import { Heart, Stethoscope, Palette, Leaf, Lightbulb, Target, Home, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 export default function About() {

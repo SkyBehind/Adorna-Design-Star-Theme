@@ -16,11 +16,15 @@ export default defineConfig({
     cors: true,
     host: '0.0.0.0',
     port: 6464,
-    allowedHosts: ['adornadesign.art', 'localhost', '127.0.0.1'],
+    allowedHosts: ['all', 'adornadesign.art', 'www.adornadesign.art'],
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': '*',
+    },
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: ['..'],
     },
   },
 });

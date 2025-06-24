@@ -60,27 +60,62 @@ export async function loadEarrings() {
       return "Signature Collection";
     };
 
-    // Merge data - create format that Gallery component expects
-    const earrings = csvData.data.map(row => {
-      // Extract the filename 
-      const filename = row.Filename || '';
-      
-      // Create artwork object with the expected structure
-      return {
-        filename: filename.replace(/\.jpg$|\.jpeg$/i, ''),
-        title: filename.replace(/\.jpg$|\.jpeg$/i, '')
-                      .split('_')
-                      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(' '),
-        medium: 'Handcrafted Earrings',
-        materials: row.Material || 'Mixed Materials',
-        dimensions: row.Size || 'Standard',
-        artistStatement: descriptions[filename] || 'A beautiful handcrafted piece made with love and attention to detail.',
-        image: `/images/${filename}`,  // Use the full filename including extension
-        collection: getCollection(row),
-        year: '2024'
-      };
-    });
+    // Define images to exclude (specific product names)
+    const excludedImages = [
+      'brown_orange_red_white_earrings.jpg',
+      'black_blue_green_pink_earrings.jpg', 
+      'black_blue_dice_orange_earrings.jpg',
+      'black_silver_earrings_1.jpg',
+      'black_gold_silver_earrings.jpg',
+      'black_gold_silver_earrings_1.jpg',
+      'black_earrings.jpg'
+    ];
+
+    // Filter and process data
+    let diceCount = 0;
+    const maxDiceImages = 3; // Limit dice images to 3
+    
+    const earrings = csvData.data
+      .filter(row => {
+        const filename = row.Filename || '';
+        
+        // Skip excluded specific product images
+        if (excludedImages.includes(filename.toLowerCase())) {
+          return false;
+        }
+        
+        // Limit dice images
+        const isDice = filename.toLowerCase().includes('dice') || 
+                      (row["Theme or Motif"] || "").toLowerCase().includes("dice");
+        if (isDice) {
+          if (diceCount >= maxDiceImages) {
+            return false;
+          }
+          diceCount++;
+        }
+        
+        return true;
+      })
+      .map(row => {
+        // Extract the filename 
+        const filename = row.Filename || '';
+        
+        // Create artwork object with the expected structure
+        return {
+          filename: filename.replace(/\.jpg$|\.jpeg$/i, ''),
+          title: filename.replace(/\.jpg$|\.jpeg$/i, '')
+                        .split('_')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' '),
+          medium: 'Handcrafted Earrings',
+          materials: row.Material || 'Mixed Materials',
+          dimensions: row.Size || 'Standard',
+          artistStatement: descriptions[filename] || 'A beautiful handcrafted piece made with love and attention to detail.',
+          image: `/images/${filename}`,  // Use the full filename including extension
+          collection: getCollection(row),
+          year: '2024'
+        };
+      });
     
     console.log("Earrings processed, count:", earrings.length);
     if (earrings.length > 0) {
