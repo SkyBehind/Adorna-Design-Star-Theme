@@ -32,10 +32,13 @@ Adorna Design represents the convergence of three decades of healing work and ar
 - **The Artist**: Comprehensive biography and artistic journey
 
 ### 🚀 **Performance Features**
-- **Lazy Loading**: Images load only when visible
-- **Pagination**: "Load More" system for better performance
-- **Loading Skeletons**: Smooth loading experience
-- **Category Filtering**: Organized by material and style
+- **Image Preloading**: Critical images load in background for instant transitions
+- **Loading Screen**: Elegant animation while optimizing mobile experience  
+- **Lazy Loading**: Images load only when needed to save bandwidth
+- **Code Splitting**: Separate vendor and UI chunks for faster initial load
+- **Production Build**: Nginx-optimized static files with gzip compression
+- **Mobile Optimization**: Responsive design with touch-friendly interactions
+- **Category Filtering**: Smart filtering system for jewelry collections
 - **Photography Credits**: Proper attribution to Danielle Osfalg
 
 ### 🛠️ **Technical Excellence**
@@ -64,8 +67,8 @@ Adorna Design represents the convergence of three decades of healing work and ar
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/adorna-design.git
-   cd adorna-design
+   git clone https://github.com/SkyBehind/Adorna-Design.git
+   cd Adorna-Design
    ```
 
 2. **Run the interactive deployment script**
@@ -73,10 +76,27 @@ Adorna Design represents the convergence of three decades of healing work and ar
    ./deploy.sh
    ```
 
-3. **Follow the prompts**
-   - Choose your preferred port (default: 6464)
+3. **Choose deployment type**
+   - **Development**: Hot reload, debugging features (slower loading)
+   - **Production**: Optimized build with nginx (faster loading)
+
+4. **Follow the prompts**
+   - Choose your preferred port (6464 for dev, 80 for production)
    - Confirm deployment settings
    - Access your site at `http://localhost:YOUR_PORT`
+
+### Manual Docker Commands
+
+**Development Mode:**
+```bash
+docker compose up -d
+```
+
+**Production Mode (Optimized):**
+```bash
+docker build -f Dockerfile.prod -t adorna-design-prod .
+docker run -d --name adorna-design-app -p 80:80 adorna-design-prod
+```
 
 ### Development Mode
 
