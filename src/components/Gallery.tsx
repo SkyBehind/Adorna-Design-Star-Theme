@@ -27,6 +27,13 @@ export default function Gallery() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Helper function to organize artworks into collections (commented out as not currently used)
   // const getCollectionFromMaterial = (material: string): string => {
@@ -130,11 +137,81 @@ export default function Gallery() {
   const collections = ['all', ...new Set(artworks.map(artwork => artwork.collection))];
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-6">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Starfield Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 -z-10">
+        {/* Scroll-based starfield */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute rounded-full bg-white opacity-95 shadow-white shadow-sm"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${4 + Math.random() * 4}px`,
+              height: `${4 + Math.random() * 4}px`,
+              transform: `translateY(${scrollY * (0.2 + i * 0.02)}px)`,
+              filter: 'brightness(1.2)',
+            }}
+          />
+        ))}
+        
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={`medium-star-${i}`}
+            className="absolute rounded-full bg-white opacity-85"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              transform: `translateY(${scrollY * (0.1 + i * 0.01)}px)`,
+              filter: 'brightness(1.1)',
+            }}
+          />
+        ))}
+        
+        {[...Array(40)].map((_, i) => (
+          <div
+            key={`small-star-${i}`}
+            className="absolute rounded-full bg-white opacity-70"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${1 + Math.random() * 2}px`,
+              height: `${1 + Math.random() * 2}px`,
+              transform: `translateY(${scrollY * (0.05 + i * 0.005)}px)`,
+            }}
+          />
+        ))}
+        
+        {/* Nebula clouds */}
+        <div className="absolute inset-0 opacity-20">
+          <div 
+            className="absolute w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+            style={{
+              left: '10%',
+              top: '20%',
+              transform: `translateY(${scrollY * 0.15}px)`,
+            }}
+          />
+          <div 
+            className="absolute w-80 h-80 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl"
+            style={{
+              right: '15%',
+              top: '60%',
+              transform: `translateY(${scrollY * 0.1}px)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content overlay */}
+      <div className="relative z-10 container mx-auto py-12 px-4 md:px-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-slate-800 mb-2">Gallery of Works</h2>
-          <p className="text-slate-500">
+          <h2 className="text-3xl font-bold text-white mb-2">Gallery of Works</h2>
+          <p className="text-rose-200">
             Explore our collection of handcrafted wearable art pieces
           </p>
         </div>
@@ -267,15 +344,69 @@ export default function Gallery() {
 
       {/* Collection Note */}
       <div className="mt-20 text-center">
-        <div className="max-w-2xl mx-auto bg-slate-50/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-200">
-          <Sparkles className="w-8 h-8 text-slate-600 mx-auto mb-4" />
-          <p className="text-sm text-slate-600 leading-relaxed italic">
+        <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+          <Sparkles className="w-8 h-8 text-rose-400 mx-auto mb-4" />
+          <p className="text-sm text-white leading-relaxed italic">
             "Each piece in this collection represents a dialogue between my hands and the materials, 
             a conversation that happens in the quiet moments between healing others and creating beauty. 
             These are not just accessories—they are wearable meditations on the intersection of art and life."
           </p>
-          <p className="text-xs text-slate-500 mt-4 font-medium">— Gina</p>
+          <p className="text-xs text-rose-200 mt-4 font-medium">— Gina</p>
         </div>
+      </div>
+
+      {/* Artist Footer */}
+      <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <img 
+                src="/images/adorna_design_logo.svg" 
+                alt="Adorna Design" 
+                className="w-12 h-12"
+              />
+              <div>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-rose-300 bg-clip-text text-transparent">
+                  Adorna Design
+                </h3>
+                <p className="text-sm text-rose-200">Gina • Artisan</p>
+              </div>
+            </div>
+            <p className="text-white mb-6 max-w-md mx-auto">
+              Creating art that bridges the worlds of healing and beauty, 
+              one handcrafted piece at a time.
+            </p>
+            <div className="space-y-2">
+              <p className="text-xs text-rose-200">
+                © 2025 Adorna Design. All artistic works are original and handcrafted by Gina.
+              </p>
+              <p className="text-xs text-rose-200">
+                Photography by Danielle Osfalg - Thank you for capturing the beauty of these handcrafted pieces.
+              </p>
+              <p className="text-xs text-rose-300">
+                Website crafted with ❤️ by{' '}
+                <a 
+                  href="https://magicunicorn.tech" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Magic Unicorn Unconventional Technology & Stuff Inc
+                </a>
+                {' '}using{' '}
+                <a 
+                  href="https://unicorncommander.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Unicorn Commander UC-1
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
       </div>
     </div>
   );

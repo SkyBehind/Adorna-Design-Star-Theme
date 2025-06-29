@@ -1,256 +1,369 @@
-import { Heart, Stethoscope, Palette, Leaf, Lightbulb, Target, Home, Eye } from 'lucide-react';
+import { Heart, Palette, Leaf, Target, Sparkles, Quote, Scissors, Gem, Flower2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useEffect, useState } from 'react';
 
 export default function About() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Space Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
+        {/* Scroll-based starfield */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute rounded-full bg-white opacity-95 shadow-white shadow-sm"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${4 + Math.random() * 4}px`,
+              height: `${4 + Math.random() * 4}px`,
+              transform: `translateY(${scrollY * (0.2 + i * 0.02)}px)`,
+              filter: 'brightness(1.2)',
+            }}
+          />
+        ))}
+        
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={`medium-star-${i}`}
+            className="absolute rounded-full bg-white opacity-85"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              transform: `translateY(${scrollY * (0.1 + i * 0.01)}px)`,
+              filter: 'brightness(1.1)',
+            }}
+          />
+        ))}
+        
+        {[...Array(40)].map((_, i) => (
+          <div
+            key={`small-star-${i}`}
+            className="absolute rounded-full bg-white opacity-70"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${1 + Math.random() * 2}px`,
+              height: `${1 + Math.random() * 2}px`,
+              transform: `translateY(${scrollY * (0.05 + i * 0.005)}px)`,
+            }}
+          />
+        ))}
+        
+        {/* Nebula clouds */}
+        <div className="absolute inset-0 opacity-30">
+          <div 
+            className="absolute w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+            style={{
+              left: '10%',
+              top: '20%',
+              transform: `translateY(${scrollY * 0.15}px)`,
+            }}
+          />
+          <div 
+            className="absolute w-80 h-80 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl"
+            style={{
+              right: '15%',
+              top: '60%',
+              transform: `translateY(${scrollY * 0.1}px)`,
+            }}
+          />
+          <div 
+            className="absolute w-64 h-64 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-full blur-3xl"
+            style={{
+              left: '60%',
+              top: '10%',
+              transform: `translateY(${scrollY * 0.08}px)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content overlay */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
       {/* Artist Portrait Section */}
-      <div className="text-center mb-20">
-        <div className="relative inline-block mb-10">
-          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-8 overflow-hidden shadow-xl border-4 border-white">
-            <img 
-              src="/images/Gina3.jpeg" 
-              alt="Gina" 
-              className="w-full h-full object-cover object-center"
-            />
+      <div className="text-center mb-24 relative">        
+        <div className="relative inline-block mb-12">
+          {/* Enhanced portrait with multiple rings */}
+          <div className="relative">
+            <div className="w-48 h-48 md:w-56 md:h-56 rounded-full mx-auto mb-8 overflow-hidden shadow-2xl border-8 border-white/80 backdrop-blur-sm relative z-10">
+              <img 
+                src="/images/Gina3.jpeg" 
+                alt="Gina Stransky" 
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+            {/* Multiple decorative rings */}
+            <div className="absolute inset-0 w-48 h-48 md:w-56 md:h-56 mx-auto rounded-full border-2 border-rose-300/60 animate-spin-slow"></div>
+            <div className="absolute inset-2 w-44 h-44 md:w-52 md:h-52 mx-auto rounded-full border border-amber-300/60 animate-spin-reverse-slow"></div>
           </div>
-          <div className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-rose-400 to-amber-400 rounded-full animate-pulse shadow-lg"></div>
         </div>
         
-        <h2 className="text-5xl md:text-6xl font-light text-slate-800 mb-8 tracking-tight">
-          Gina
-        </h2>
-        
-        <p className="text-xl text-slate-600 italic mb-8 font-light">
-          "Multidisciplinary Artisan, Former ICU Nurse, Mother of Three"
-        </p>
-
-        <div className="max-w-3xl mx-auto">
-          <p className="text-lg text-slate-700 leading-relaxed">
-            Where most see the end of a shift, Gina sees the beginning of creation. 
-            A former intensive care nurse with over 30 years of clinical experience in high-acuity 
-            medical environments, she transforms the intensity of healing work into moments of 
-            artistic design across multiple mediums—from wearable sculptures to botanical 
-            skincare, from luminous stained glass to custom furniture that tells stories.
-          </p>
-        </div>
-      </div>
-
-      {/* Core Identity Cards */}
-      <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-20">
-        <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-          <CardContent className="p-6 md:p-8 text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Stethoscope className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-800 mb-3">The Healer</h3>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              30+ years in intensive care, known for attention to detail, calm under pressure, 
-              and compassionate care in high-acuity medical environments.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-          <CardContent className="p-6 md:p-8 text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Heart className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-800 mb-3">The Mother</h3>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              Mother of three and lifelong maker, balancing the demands of family life 
-              with an unwavering commitment to creative expression and artistic growth.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-          <CardContent className="p-6 md:p-8 text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Palette className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-800 mb-3">The Artisan</h3>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              Multidisciplinary creator blending technical precision with artistic intuition 
-              across jewelry, skincare, furniture, gardens, and architectural enhancements.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Artist Statement */}
-      <div className="mb-20">
-        <div className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-6 md:p-10 border border-slate-200 shadow-lg">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-light text-slate-800 mb-4">Artist Statement</h3>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-slate-400 to-rose-400 mx-auto"></div>
+        <div className="relative">
+          <h2 className="text-6xl md:text-7xl font-light mb-4 tracking-tight bg-gradient-to-r from-white via-rose-300 to-amber-300 bg-clip-text text-transparent">
+            Meet the Artist
+          </h2>
+          
+          <div className="flex items-center justify-center space-x-3 mb-8">
+            <div className="w-16 h-0.5 bg-gradient-to-r from-transparent to-rose-400"></div>
+            <Gem className="w-6 h-6 text-rose-400" />
+            <div className="w-16 h-0.5 bg-gradient-to-l from-transparent to-amber-400"></div>
           </div>
           
-          <div className="prose prose-lg max-w-none text-slate-700">
-            <p className="text-lg leading-relaxed mb-6">
-              My art emerges from the intersection of multiple worlds: the clinical precision of healthcare, 
-              the organic flow of creative expression, and the deep understanding that beauty has healing power. 
-              After thirty years of caring for others in their most vulnerable moments, I've learned that healing 
-              extends far beyond medicine—it lives in the objects we touch, the spaces we inhabit, and the 
-              beauty we surround ourselves with.
-            </p>
-            
-            <p className="text-lg leading-relaxed mb-6">
-              In the ICU, I was known for observing the small things that matter—the subtle changes that 
-              could mean everything. This same attention to detail now flows through every piece I create, 
-              whether it's the precise curve of an earring, the perfect balance of oils in a lip balm, 
-              or the way light moves through a piece of stained glass. Each creation carries the same 
-              care and intentionality that defined my nursing practice.
-            </p>
-            
-            <p className="text-lg leading-relaxed">
-              Through Adorna Design, I share this vision: that art should not just be beautiful, but should 
-              actively contribute to our wellbeing. Every piece is a meditation on transformation—taking 
-              raw materials and, with patience and skill, creating something that brings comfort, confidence, 
-              and joy. This work is deeply personal, a way of processing the intensity of caring for others 
-              while creating beauty that heals in its own quiet way.
-            </p>
+          <p className="text-2xl text-rose-200 italic mb-10 font-light">
+            "Gina Stransky • Lifelong Creator • Adorna Design"
+          </p>
+
+          {/* Enhanced intro with quote styling */}
+          <div className="max-w-4xl mx-auto relative">
+            <Quote className="absolute -top-4 -left-4 w-12 h-12 text-rose-300/60 transform rotate-180" />
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20 relative">
+              <p className="text-xl text-white leading-relaxed italic">
+                Gina Stransky is a lifelong maker with a passion for creating pieces that feel personal, 
+                purposeful, and rooted in care. With a steady hand and a love for detail, she designs 
+                jewelry, natural soaps, and lip balms that blend beauty with intention.
+              </p>
+            </div>
+            <Quote className="absolute -bottom-4 -right-4 w-12 h-12 text-amber-300/60" />
           </div>
         </div>
       </div>
 
-      {/* Creative Journey Timeline */}
-      <div className="mb-20">
+      {/* Artist Story - Enhanced with visual elements */}
+      <div className="mb-24 relative">
+        {/* Section header */}
         <div className="text-center mb-12">
-          <h3 className="text-3xl font-light text-slate-800 mb-6">The Creative Journey</h3>
-          <p className="text-slate-600 max-w-2xl mx-auto">
-            From critical care to creative expression—a lifetime of making, building, and transforming
-          </p>
+          <div className="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 mb-6 border border-white/20 shadow-lg">
+            <Palette className="w-5 h-5 text-rose-300" />
+            <span className="text-sm font-medium text-white">Her Creative Journey</span>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-            <CardContent className="p-8">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <Eye className="w-7 h-7 text-white" />
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Story Panel 1 */}
+          <Card className="bg-white/10 backdrop-blur-md border-rose-300/30 hover:border-rose-300/60 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-rose-400/20 to-transparent rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-110 transition-transform duration-500"></div>
+            <CardContent className="p-8 relative">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Scissors className="w-8 h-8 text-white" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800">The Observer's Eye</h3>
-                  <p className="text-sm text-slate-600">Clinical Foundation</p>
-                </div>
+                <h3 className="text-xl font-semibold text-white text-center">Precision & Patience</h3>
               </div>
-              <p className="text-slate-700 leading-relaxed">
-                Three decades in intensive care developed an innate ability to observe the small things 
-                that matter—a skill that now brings extraordinary attention to detail in every handcrafted piece. 
-                The same precision that saved lives now creates beauty.
+              <p className="text-rose-100 leading-relaxed text-center">
+                Her work is shaped by years of experience in environments that demanded precision, 
+                patience, and quiet strength—qualities now woven into everything she makes.
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-            <CardContent className="p-8">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Home className="w-7 h-7 text-white" />
+          {/* Story Panel 2 */}
+          <Card className="bg-white/10 backdrop-blur-md border-emerald-300/30 hover:border-emerald-300/60 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-transparent rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-110 transition-transform duration-500"></div>
+            <CardContent className="p-8 relative">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Flower2 className="w-8 h-8 text-white" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800">The Builder's Spirit</h3>
-                  <p className="text-sm text-slate-600">Lifelong Making</p>
-                </div>
+                <h3 className="text-xl font-semibold text-white text-center">Natural Materials</h3>
               </div>
-              <p className="text-slate-700 leading-relaxed">
-                From custom Roman blinds and hand-dyed furnishings to functional furniture, gardens, 
-                and structural home enhancements—a lifetime of creating with hands that understand 
-                both form and function, utility and unexpected elegance.
+              <p className="text-emerald-100 leading-relaxed text-center">
+                From hand-formed metal and leather earrings to nourishing soaps and soothing balms crafted 
+                with real botanicals, each item reflects a deep respect for natural materials and honest craftsmanship.
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-            <CardContent className="p-8">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Palette className="w-7 h-7 text-white" />
+          {/* Story Panel 3 */}
+          <Card className="bg-white/10 backdrop-blur-md border-amber-300/30 hover:border-amber-300/60 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-400/20 to-transparent rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-110 transition-transform duration-500"></div>
+            <CardContent className="p-8 relative">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Heart className="w-8 h-8 text-white" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800">The Color Harmonist</h3>
-                  <p className="text-sm text-slate-600">Exceptional Design Vision</p>
-                </div>
+                <h3 className="text-xl font-semibold text-white text-center">Made with Love</h3>
               </div>
-              <p className="text-slate-700 leading-relaxed">
-                An exceptional eye for color harmony and design flow guides every creative decision. 
-                This intuitive understanding of how elements work together creates pieces that feel 
-                both intentional and effortlessly beautiful.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/80 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg">
-            <CardContent className="p-8">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Heart className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800">The Healing Touch</h3>
-                  <p className="text-sm text-slate-600">Adorna Design</p>
-                </div>
-              </div>
-              <p className="text-slate-700 leading-relaxed">
-                Today, as founder of Adorna Design, every small-batch lip balm, natural soap, 
-                and one-of-a-kind earring is crafted with the same care, creativity, and precision 
-                that defined decades of compassionate nursing practice.
+              <p className="text-amber-100 leading-relaxed text-center">
+                Under the name Adorna Design, Gina brings together texture, color, and comfort to 
+                celebrate individuality and connection.
               </p>
             </CardContent>
           </Card>
         </div>
-      </div>
 
-      {/* Artistic Philosophy */}
-      <div className="bg-gradient-to-br from-slate-50 to-rose-50 rounded-3xl p-10 border border-slate-200 mb-20">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center space-x-3 bg-white/70 backdrop-blur-sm rounded-full px-6 py-3 mb-6 border border-slate-200">
-            <Lightbulb className="w-5 h-5 text-slate-600" />
-            <span className="text-sm font-medium text-slate-700">Artistic Philosophy</span>
-          </div>
-          <h3 className="text-3xl font-light text-slate-800 mb-6">The Adorna Design Approach</h3>
-          <p className="text-slate-600 max-w-2xl mx-auto">
-            Where technical precision meets artistic intuition, creating beauty that heals
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-8 text-center">
-          <div>
-            <div className="w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Eye className="w-10 h-10 text-slate-600" />
+        {/* Central Statement */}
+        <div className="mt-16 text-center">
+          <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20 relative">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-amber-400 rounded-full flex items-center justify-center shadow-lg">
+                <Sparkles className="w-4 h-4 text-white" />
+              </div>
             </div>
-            <h4 className="font-semibold text-slate-800 mb-3 text-lg">Observational Precision</h4>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              The same attention to detail that mattered in critical care now ensures every 
-              artistic element serves both beauty and purpose.
+            <p className="text-xl text-white leading-relaxed italic font-light">
+              "Whether it's a pair of earrings that catches the light just right, a gentle bar of soap, 
+              or a balm that calms the senses, her creations are meant to be used, worn, and loved."
             </p>
-          </div>
-          
-          <div>
-            <div className="w-20 h-20 bg-gradient-to-br from-green-200 to-green-300 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Leaf className="w-10 h-10 text-green-600" />
+            <div className="mt-6">
+              <p className="text-lg text-rose-200 font-medium">
+                Each piece tells a quiet story—of resilience, creativity, and the simple joy of things made by hand.
+              </p>
             </div>
-            <h4 className="font-semibold text-slate-800 mb-3 text-lg">Natural Materials</h4>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              A deep appreciation for natural materials and practical beauty, honoring the 
-              inherent wisdom found in organic forms and processes.
-            </p>
-          </div>
-          
-          <div>
-            <div className="w-20 h-20 bg-gradient-to-br from-rose-200 to-rose-300 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Target className="w-10 h-10 text-rose-600" />
-            </div>
-            <h4 className="font-semibold text-slate-800 mb-3 text-lg">Work Done Well</h4>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              The satisfaction of work done well—each piece reflects a commitment to quality 
-              and craftsmanship that comes from a lifetime of caring practice.
-            </p>
           </div>
         </div>
       </div>
 
+      {/* Design Philosophy - Enhanced */}
+      <div className="relative mb-20">        
+        <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 shadow-2xl">
+          <div className="text-center mb-16">
+            {/* Enhanced header */}
+            <div className="relative mb-8">
+              <div className="relative inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md rounded-full px-8 py-4 border border-white/20 shadow-lg">
+                <Sparkles className="w-6 h-6 text-rose-400" />
+                <span className="text-lg font-semibold text-white">Design Philosophy</span>
+                <Gem className="w-6 h-6 text-amber-400" />
+              </div>
+            </div>
+            
+            <h3 className="text-4xl md:text-5xl font-light mb-6 bg-gradient-to-r from-white via-rose-300 to-amber-300 bg-clip-text text-transparent">
+              The Adorna Design Approach
+            </h3>
+            
+            <div className="flex items-center justify-center space-x-4 mb-8">
+              <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-rose-400 to-transparent"></div>
+              <Gem className="w-5 h-5 text-rose-400" />
+              <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+            </div>
+            
+            <p className="text-xl text-rose-200 max-w-3xl mx-auto leading-relaxed">
+              Creating pieces that feel personal, purposeful, and rooted in care
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-10">
+            {/* Philosophy Card 1 */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-3xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300"></div>
+              <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-rose-300/30 group-hover:shadow-2xl transition-all duration-300 text-center">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-rose-400 to-pink-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    <Heart className="w-12 h-12 text-white" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-rose-300 to-pink-400 rounded-full animate-pulse"></div>
+                </div>
+                <h4 className="font-bold text-white mb-4 text-xl">Personal & Purposeful</h4>
+                <p className="text-rose-100 leading-relaxed">
+                  Every piece is created with intention and care, designed to feel personal 
+                  and meaningful to the person who wears or uses it.
+                </p>
+              </div>
+            </div>
+            
+            {/* Philosophy Card 2 */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-green-400/20 rounded-3xl transform -rotate-2 group-hover:-rotate-4 transition-transform duration-300"></div>
+              <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-emerald-300/30 group-hover:shadow-2xl transition-all duration-300 text-center">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-green-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    <Leaf className="w-12 h-12 text-white" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-emerald-300 to-green-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                </div>
+                <h4 className="font-bold text-white mb-4 text-xl">Natural Materials</h4>
+                <p className="text-emerald-100 leading-relaxed">
+                  A deep respect for natural materials and honest craftsmanship, honoring 
+                  the inherent beauty found in organic forms and botanicals.
+                </p>
+              </div>
+            </div>
+            
+            {/* Philosophy Card 3 */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-3xl transform rotate-2 group-hover:rotate-4 transition-transform duration-300"></div>
+              <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-amber-300/30 group-hover:shadow-2xl transition-all duration-300 text-center">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    <Target className="w-12 h-12 text-white" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-amber-300 to-orange-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                </div>
+                <h4 className="font-bold text-white mb-4 text-xl">Made to be Loved</h4>
+                <p className="text-amber-100 leading-relaxed">
+                  Created with quiet strength and attention to detail, each piece is meant 
+                  to be used, worn, and cherished as part of daily life.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Artist Footer */}
+      <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <img 
+                src="/images/adorna_design_logo.svg" 
+                alt="Adorna Design" 
+                className="w-12 h-12"
+              />
+              <div>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-rose-300 bg-clip-text text-transparent">
+                  Adorna Design
+                </h3>
+                <p className="text-sm text-rose-200">Gina • Artisan</p>
+              </div>
+            </div>
+            <p className="text-white mb-6 max-w-md mx-auto">
+              Creating art that bridges the worlds of healing and beauty, 
+              one handcrafted piece at a time.
+            </p>
+            <div className="space-y-2">
+              <p className="text-xs text-rose-200">
+                © 2025 Adorna Design. All artistic works are original and handcrafted by Gina.
+              </p>
+              <p className="text-xs text-rose-200">
+                Photography by Danielle Osfalg - Thank you for capturing the beauty of these handcrafted pieces.
+              </p>
+              <p className="text-xs text-rose-300">
+                Website crafted with ❤️ by{' '}
+                <a 
+                  href="https://magicunicorn.tech" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Magic Unicorn Unconventional Technology & Stuff Inc
+                </a>
+                {' '}using{' '}
+                <a 
+                  href="https://unicorncommander.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Unicorn Commander UC-1
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      </div>
     </div>
   );
 }

@@ -3,9 +3,10 @@ import { ChevronLeft } from 'lucide-react';
 import Gallery from './components/Gallery';
 import About from './components/About';
 import LippieAndLather from './components/LippieAndLather';
+import WhereToFind from './components/WhereToFind';
 
 interface CarouselSection {
-  id: 'jewelry' | 'lippie' | 'about';
+  id: 'jewelry' | 'lippie' | 'about' | 'wheretofind';
   title: string;
   subtitle: string;
   description: string;
@@ -20,7 +21,7 @@ function App() {
   const [currentSection, setCurrentSection] = useState<number>(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [activeContentSection, setActiveContentSection] = useState<'jewelry' | 'lippie' | 'about' | null>(null);
+  const [activeContentSection, setActiveContentSection] = useState<'jewelry' | 'lippie' | 'about' | 'wheretofind' | null>(null);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   // Remove preview index state - we'll show all images in a scrollable container
 
@@ -37,12 +38,8 @@ function App() {
       previewImages: [
         '/images/compressed/bead_black_brown_orange_white_earrings.jpg',
         '/images/compressed/bead_blue_silver_earrings.jpg',
-        '/images/compressed/black_blue_crystal_gold_white_earrings.jpg',
-        '/images/compressed/black_gold_silver_earrings.jpg',
-        '/images/compressed/blue_silver_earrings.jpg',
         '/images/compressed/circle_gold_earrings.jpg',
         '/images/compressed/bead_black_purple_earrings.jpg',
-        '/images/compressed/gold_pink_white_earrings.jpg',
         '/images/compressed/silver_earrings.jpg',
         '/images/compressed/unique_earrings_earrings.jpg'
       ]
@@ -74,9 +71,20 @@ function App() {
       subtitle: 'Gina • Healer & Creator',
       description: 'Three decades of healing work transformed into artistic design—where the precision of healthcare meets the flow of creative expression.',
       image: '/images/Artist-backdrop.jpg',
-      gradient: 'from-rose-900/60 via-pink-800/40 to-transparent',
+      gradient: 'from-indigo-950/70 via-purple-900/50 to-transparent',
       textColor: 'text-white',
       component: About,
+      previewImages: []
+    },
+    {
+      id: 'wheretofind',
+      title: 'Where to Find',
+      subtitle: 'Markets • Retail • Appointments',
+      description: 'Visit us at farmers markets, discover retail partners, or schedule a personal consultation. Each interaction is an opportunity to connect with the artistry and intention behind every piece.',
+      image: '/images/Artist-backdrop.jpg', // Reuse same image for now
+      gradient: 'from-cyan-900/60 via-teal-800/40 to-transparent',
+      textColor: 'text-white',
+      component: WhereToFind,
       previewImages: []
     }
   ];
@@ -109,7 +117,7 @@ function App() {
     }, 300);
   };
 
-  const enterSection = (sectionId: 'jewelry' | 'lippie' | 'about') => {
+  const enterSection = (sectionId: 'jewelry' | 'lippie' | 'about' | 'wheretofind') => {
     setActiveContentSection(sectionId);
     setShowContent(true);
   };
@@ -119,17 +127,19 @@ function App() {
     setActiveContentSection(null);
   };
 
-  // Get warm backdrop colors based on current section
+  // Get beautiful gradient colors for each section using blue, pink, purple shades
   const getWarmBackdrop = (sectionId: string) => {
     switch (sectionId) {
       case 'jewelry':
-        return 'bg-amber-900/40'; // Warm amber for jewelry
+        return 'bg-gradient-to-br from-purple-600/50 to-pink-600/50'; // Purple-pink gradient for jewelry
       case 'lippie':
-        return 'bg-emerald-800/40'; // Warm emerald for natural products
+        return 'bg-gradient-to-br from-blue-500/50 to-purple-500/50'; // Blue-purple gradient for natural products
       case 'about':
-        return 'bg-rose-900/40'; // Warm rose for personal section
+        return 'bg-gradient-to-br from-indigo-600/70 to-purple-700/70'; // Dark contrasted indigo-purple gradient for artist
+      case 'wheretofind':
+        return 'bg-gradient-to-br from-cyan-400/70 to-teal-400/70'; // Beautiful vibrant cyan-teal gradient for location
       default:
-        return 'bg-amber-900/40';
+        return 'bg-gradient-to-br from-purple-600/50 to-pink-600/50';
     }
   };
 
@@ -246,7 +256,7 @@ function App() {
   if (showContent && activeContentSection) {
     const ContentComponent = carouselSections.find(s => s.id === activeContentSection)?.component;
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-rose-50">
+      <div className="min-h-screen w-full">
         {/* Elegant Back Navigation */}
         <div className="fixed top-4 left-4 sm:top-8 sm:left-8 z-50">
           <button
@@ -270,12 +280,12 @@ function App() {
         </div>
 
         {/* Content */}
-        <div className="px-4 sm:px-0">
+        <div className="relative z-10">
           {ContentComponent && <ContentComponent />}
         </div>
 
         {/* Artist Footer */}
-        <footer className="bg-slate-50/80 backdrop-blur-sm border-t border-slate-200 mt-12 sm:mt-24">
+        <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-4 mb-6">
@@ -285,30 +295,30 @@ function App() {
                   className="w-12 h-12"
                 />
                 <div>
-                  <h3 className="text-xl font-bold bg-gradient-to-r from-slate-700 to-rose-600 bg-clip-text text-transparent">
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-white to-rose-300 bg-clip-text text-transparent">
                     Adorna Design
                   </h3>
-                  <p className="text-sm text-slate-600">Gina • Artisan</p>
+                  <p className="text-sm text-rose-200">Gina • Artisan</p>
                 </div>
               </div>
-              <p className="text-slate-600 mb-6 max-w-md mx-auto">
+              <p className="text-white mb-6 max-w-md mx-auto">
                 Creating art that bridges the worlds of healing and beauty, 
                 one handcrafted piece at a time.
               </p>
               <div className="space-y-2">
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-rose-200">
                   © 2025 Adorna Design. All artistic works are original and handcrafted by Gina.
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-rose-200">
                   Photography by Danielle Osfalg - Thank you for capturing the beauty of these handcrafted pieces.
                 </p>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-rose-300">
                   Website crafted with ❤️ by{' '}
                   <a 
                     href="https://magicunicorn.tech" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-slate-500 hover:text-slate-700 transition-colors"
+                    className="text-rose-200 hover:text-white transition-colors"
                   >
                     Magic Unicorn Unconventional Technology & Stuff Inc
                   </a>
@@ -317,7 +327,7 @@ function App() {
                     href="https://unicorncommander.com" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-slate-500 hover:text-slate-700 transition-colors"
+                    className="text-rose-200 hover:text-white transition-colors"
                   >
                     Unicorn Commander UC-1
                   </a>
@@ -336,16 +346,90 @@ function App() {
     <div className="min-h-screen w-full bg-black"> {/* Mobile-first: remove h-screen and overflow-hidden */}
       {/* Background Section - Mobile First */}
       <div className="relative min-h-screen flex flex-col">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-          style={{ 
-            backgroundImage: `url(${currentSlide.image})`,
-            backgroundPosition: currentSlide.id === 'about' ? 'center 25%' : 'center'
-          }}
-        />
-        {/* Strong overlay for mobile readability */}
-        <div className="absolute inset-0 bg-black/60 transition-opacity duration-1000" />
+        {/* Starfield Background for all sections */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
+            {/* Pure white starfield for all pages */}
+            {[...Array(15)].map((_, i) => (
+              <div
+                key={`main-star-${i}`}
+                className="absolute rounded-full bg-white shadow-white shadow-sm"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  width: `${4 + Math.random() * 4}px`,
+                  height: `${4 + Math.random() * 4}px`,
+                  opacity: 1, // Pure white on desktop
+                  animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite alternate`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  filter: 'brightness(1.4) drop-shadow(0 0 3px white)',
+                }}
+              />
+            ))}
+            
+            {[...Array(25)].map((_, i) => (
+              <div
+                key={`main-medium-star-${i}`}
+                className="absolute rounded-full bg-white"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  width: `${2 + Math.random() * 3}px`,
+                  height: `${2 + Math.random() * 3}px`,
+                  opacity: 0.95, // Nearly pure white
+                  animation: `twinkle ${3 + Math.random() * 2}s ease-in-out infinite alternate`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  filter: 'brightness(1.3) drop-shadow(0 0 2px white)',
+                }}
+              />
+            ))}
+            
+            {[...Array(40)].map((_, i) => (
+              <div
+                key={`main-small-star-${i}`}
+                className="absolute rounded-full bg-white"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  width: `${1 + Math.random() * 2}px`,
+                  height: `${1 + Math.random() * 2}px`,
+                  opacity: 0.85, // Bright white
+                  animation: `twinkle ${4 + Math.random() * 2}s ease-in-out infinite alternate`,
+                  animationDelay: `${Math.random() * 4}s`,
+                  filter: 'brightness(1.2)',
+                }}
+              />
+            ))}
+            
+            {/* Brighter nebula clouds with section-specific colors */}
+            <div className="absolute inset-0 opacity-40">
+              {currentSlide.id === 'jewelry' && (
+                <>
+                  <div className="absolute w-96 h-96 bg-gradient-to-r from-purple-400/30 to-pink-400/30 rounded-full blur-3xl" style={{ left: '10%', top: '20%' }} />
+                  <div className="absolute w-80 h-80 bg-gradient-to-r from-blue-400/30 to-indigo-400/30 rounded-full blur-3xl" style={{ right: '15%', top: '60%' }} />
+                </>
+              )}
+              {currentSlide.id === 'lippie' && (
+                <>
+                  <div className="absolute w-96 h-96 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full blur-3xl" style={{ left: '15%', top: '25%' }} />
+                  <div className="absolute w-80 h-80 bg-gradient-to-r from-green-300/20 to-emerald-400/20 rounded-full blur-3xl" style={{ right: '10%', top: '55%' }} />
+                </>
+              )}
+              {currentSlide.id === 'wheretofind' && (
+                <>
+                  <div className="absolute w-96 h-96 bg-gradient-to-r from-cyan-400/30 to-teal-400/30 rounded-full blur-3xl" style={{ left: '20%', top: '30%' }} />
+                  <div className="absolute w-80 h-80 bg-gradient-to-r from-teal-400/30 to-emerald-400/30 rounded-full blur-3xl" style={{ right: '15%', top: '50%' }} />
+                </>
+              )}
+              {currentSlide.id === 'about' && (
+                <>
+                  <div className="absolute w-96 h-96 bg-gradient-to-r from-indigo-500/40 to-purple-600/40 rounded-full blur-3xl" style={{ left: '15%', top: '25%' }} />
+                  <div className="absolute w-80 h-80 bg-gradient-to-r from-purple-600/40 to-blue-700/40 rounded-full blur-3xl" style={{ right: '10%', top: '55%' }} />
+                </>
+              )}
+            </div>
+        </div>
+        {/* Lighter overlay for better starfield visibility */}
+        <div className="absolute inset-0 bg-black/30 lg:bg-black/15 transition-opacity duration-1000" />
         <div className={`absolute inset-0 bg-gradient-to-b ${currentSlide.gradient} transition-opacity duration-1000`} />
 
         {/* Header with Logo - Mobile Safe */}
@@ -371,7 +455,7 @@ function App() {
                   onClick={() => goToSection(index)}
                   className={`group transition-all duration-500 px-6 py-4 rounded-2xl border-2 backdrop-blur-sm ${
                     index === currentSection 
-                      ? `${getWarmBackdrop(section.id)} border-white/60` 
+                      ? `${getWarmBackdrop(section.id)} border-white/70` 
                       : `${getWarmBackdrop(section.id)}/60 border-white/30 hover:${getWarmBackdrop(section.id)} hover:border-white/50`
                   }`}
                 >
@@ -424,7 +508,10 @@ function App() {
                         <div className="text-white text-center p-2">
                           <div className="text-xl sm:text-2xl mb-1 font-bold">+</div>
                           <div className="text-xs sm:text-sm font-bold leading-tight">
-                            {currentSlide.id === 'jewelry' ? 'See All' : currentSlide.id === 'lippie' ? 'Shop All' : 'Learn More'}
+                            {currentSlide.id === 'jewelry' ? 'See All' : 
+                             currentSlide.id === 'lippie' ? 'See All' : 
+                             currentSlide.id === 'wheretofind' ? 'Find Us' :
+                             'Learn More'}
                           </div>
                         </div>
                       </button>
@@ -432,15 +519,19 @@ function App() {
                   </div>
                 )}
 
-                {/* Main Action Button - Mobile Optimized */}
-                <div className="pt-4">
-                  <button
-                    onClick={() => enterSection(currentSlide.id)}
-                    className={`w-full group relative overflow-hidden ${getWarmBackdrop(currentSlide.id)} backdrop-blur-xl border-2 border-white/60 rounded-2xl px-6 py-4 sm:py-5 text-white font-bold transition-all duration-300 hover:${getWarmBackdrop(currentSlide.id)}/80 hover:border-white active:scale-95 text-base sm:text-lg min-h-[60px] shadow-xl`}
-                  >
-                    <span className="relative z-10 text-shadow-strong">{currentSlide.id === 'about' ? 'Meet the Artist' : 'Explore Full Collection'}</span>
-                  </button>
-                </div>
+                {/* Main Action Button - Mobile Optimized - Only for About and Where to Find */}
+                {(currentSlide.id === 'about' || currentSlide.id === 'wheretofind') && (
+                  <div className="pt-4">
+                    <button
+                      onClick={() => enterSection(currentSlide.id)}
+                      className={`w-full group relative overflow-hidden ${getWarmBackdrop(currentSlide.id)} backdrop-blur-xl border-2 border-white/60 rounded-2xl px-6 py-4 sm:py-5 text-white font-bold transition-all duration-300 hover:${getWarmBackdrop(currentSlide.id)}/80 hover:border-white active:scale-95 text-base sm:text-lg min-h-[60px] shadow-xl`}
+                    >
+                      <span className="relative z-10 text-shadow-strong">
+                        {currentSlide.id === 'about' ? 'Meet the Artist' : 'Find Adorna Design'}
+                      </span>
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Content Section - Mobile Optimized (moved to right side) */}
@@ -462,26 +553,129 @@ function App() {
                   </p>
                 </div>
                 
-                {/* Ingredients for Lippie & Lather - Mobile Optimized */}
+                {/* Enhanced Lippie & Lather Information - Condensed Layout */}
                 {currentSlide.id === 'lippie' && (
-                  <div className="space-y-3">
-                    <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/30`}>
-                      <h3 className="text-white font-bold text-sm sm:text-base mb-3 flex items-center lg:justify-end">
-                        <span className="w-3 h-3 sm:w-4 sm:h-4 bg-emerald-400 rounded-full mr-3 lg:ml-3 lg:mr-0 lg:order-2"></span>
-                        <span className="lg:order-1">Natural Soap Ingredients</span>
-                      </h3>
-                      <p className="text-white text-sm sm:text-base leading-relaxed">
-                        Goat's Milk • Coconut Oil • Cosmetic Grade Tint • Cosmetic Grade Fragrances • Natural Dried Herbs
-                      </p>
+                  <div className="space-y-2">
+                    {/* Lip Balm Flavors & Soap Fragrances - Combined Row */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                      <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-lg p-3 border border-white/30`}>
+                        <h3 className="text-white font-bold text-xs sm:text-sm mb-2 flex items-center">
+                          <span className="text-lg mr-2">🍯</span>
+                          <span>Lip Balm Flavors</span>
+                        </h3>
+                        <div className="grid grid-cols-2 gap-1 text-white text-xs">
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-red-300">🍎</span>
+                            <span>Apple</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-purple-300">🍇</span>
+                            <span>Grape</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-pink-300">🍓</span>
+                            <span>Strawberry</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-green-300">🌿</span>
+                            <span>Mint</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-lg p-3 border border-white/30`}>
+                        <h3 className="text-white font-bold text-xs sm:text-sm mb-2 flex items-center">
+                          <span className="text-lg mr-2">🌸</span>
+                          <span>Soap Fragrances</span>
+                        </h3>
+                        <div className="grid grid-cols-2 gap-1 text-white text-xs">
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-rose-300">🌹</span>
+                            <span>Rose</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-white">🌼</span>
+                            <span>Jasmine</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-purple-300">💜</span>
+                            <span>Lavender</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-green-300">🍃</span>
+                            <span>White Tea</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-blue-200">🌊</span>
+                            <span>Linen</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/30`}>
-                      <h3 className="text-white font-bold text-sm sm:text-base mb-3 flex items-center lg:justify-end">
-                        <span className="w-3 h-3 sm:w-4 sm:h-4 bg-amber-400 rounded-full mr-3 lg:ml-3 lg:mr-0 lg:order-2"></span>
-                        <span className="lg:order-1">Lip Balm Ingredients</span>
+
+                    {/* Botanical Additives - Condensed Grid */}
+                    <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-lg p-3 border border-white/30`}>
+                      <h3 className="text-white font-bold text-xs sm:text-sm mb-2 flex items-center">
+                        <span className="text-lg mr-2">🌿</span>
+                        <span>Botanical Additives</span>
                       </h3>
-                      <p className="text-white text-sm sm:text-base leading-relaxed">
-                        Beeswax • Coconut Oil • Shea Butter • Food Grade Flavoring
-                      </p>
+                      <div className="grid grid-cols-4 gap-1 text-white text-xs">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-amber-300">🌾</span>
+                          <span>Oatmeal</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-green-300">🌿</span>
+                          <span>Eucalyptus</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-blue-200">🧂</span>
+                          <span>Sea Salt</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-yellow-300">🌼</span>
+                          <span>Chamomile</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-green-400">🌱</span>
+                          <span>CBD</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-lime-300">🌾</span>
+                          <span>Lemongrass</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-rose-300">🌹</span>
+                          <span>Roses</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-purple-300">💜</span>
+                          <span>Lavender</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Base Ingredients - Combined Row */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                      <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-lg p-3 border border-white/30`}>
+                        <h3 className="text-white font-bold text-xs sm:text-sm mb-2 flex items-center">
+                          <span className="text-lg mr-2">🧼</span>
+                          <span>Soap Base</span>
+                        </h3>
+                        <p className="text-white text-xs leading-relaxed">
+                          Goat's Milk • Coconut Oil • Cosmetic Tint • Fragrances
+                        </p>
+                      </div>
+
+                      <div className={`${getWarmBackdrop(currentSlide.id)} backdrop-blur-sm rounded-lg p-3 border border-white/30`}>
+                        <h3 className="text-white font-bold text-xs sm:text-sm mb-2 flex items-center">
+                          <span className="text-lg mr-2">💋</span>
+                          <span>Lip Balm Base</span>
+                        </h3>
+                        <p className="text-white text-xs leading-relaxed">
+                          Beeswax • Coconut Oil • Shea Butter • Flavoring
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -503,7 +697,7 @@ function App() {
                   className={`p-4 rounded-2xl text-center transition-all duration-300 min-h-[72px] flex flex-col justify-center border-2 ${
                     index === currentSection 
                       ? 'bg-white text-black shadow-xl border-white' 
-                      : `${getWarmBackdrop(section.id)}/50 text-white hover:bg-white/20 active:scale-95 border-white/30`
+                      : `${getWarmBackdrop(section.id)}/70 text-white hover:${getWarmBackdrop(section.id)}/90 active:scale-95 border-white/40`
                   }`}
                 >
                   <div>
@@ -515,6 +709,59 @@ function App() {
             </div>
           </div>
         </nav>
+
+        {/* Artist Footer for Main Carousel */}
+        <footer className="relative z-10 bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24 mb-20 lg:mb-0">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+            <div className="text-center">
+              <div className="flex items-center justify-center space-x-4 mb-6">
+                <img 
+                  src="/images/adorna_design_logo.svg" 
+                  alt="Adorna Design" 
+                  className="w-12 h-12"
+                />
+                <div>
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-white to-rose-300 bg-clip-text text-transparent">
+                    Adorna Design
+                  </h3>
+                  <p className="text-sm text-rose-200">Gina • Artisan</p>
+                </div>
+              </div>
+              <p className="text-white mb-6 max-w-md mx-auto">
+                Creating art that bridges the worlds of healing and beauty, 
+                one handcrafted piece at a time.
+              </p>
+              <div className="space-y-2">
+                <p className="text-xs text-rose-200">
+                  © 2025 Adorna Design. All artistic works are original and handcrafted by Gina.
+                </p>
+                <p className="text-xs text-rose-200">
+                  Photography by Danielle Osfalg - Thank you for capturing the beauty of these handcrafted pieces.
+                </p>
+                <p className="text-xs text-rose-300">
+                  Website crafted with ❤️ by{' '}
+                  <a 
+                    href="https://magicunicorn.tech" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-rose-200 hover:text-white transition-colors"
+                  >
+                    Magic Unicorn Unconventional Technology & Stuff Inc
+                  </a>
+                  {' '}using{' '}
+                  <a 
+                    href="https://unicorncommander.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-rose-200 hover:text-white transition-colors"
+                  >
+                    Unicorn Commander UC-1
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { MapPin, Calendar, Clock, Store, Phone, ExternalLink, Navigation } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { MapPin, Calendar, Clock, Phone, ExternalLink, Navigation, Mail, User, MessageSquare, Send } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,25 @@ interface StoreLocation {
 }
 
 export default function WhereToFind() {
-  const [activeTab, setActiveTab] = useState<'markets' | 'stores'>('markets');
+  // Removed activeTab state since we only show appointment content now
+  const [scrollY, setScrollY] = useState(0);
+  const [appointmentForm, setAppointmentForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    preferredDate: '',
+    preferredTime: '',
+    serviceType: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Sample market schedule data - would come from data source
   const marketSchedule: MarketSchedule[] = [
@@ -117,45 +135,290 @@ export default function WhereToFind() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Starfield Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 -z-10">
+        {/* Scroll-based starfield */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute rounded-full bg-white opacity-95 shadow-white shadow-sm"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${4 + Math.random() * 4}px`,
+              height: `${4 + Math.random() * 4}px`,
+              transform: `translateY(${scrollY * (0.2 + i * 0.02)}px)`,
+            }}
+          />
+        ))}
+        
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={`medium-star-${i}`}
+            className="absolute rounded-full bg-white opacity-85"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              transform: `translateY(${scrollY * (0.1 + i * 0.01)}px)`,
+            }}
+          />
+        ))}
+        
+        {[...Array(40)].map((_, i) => (
+          <div
+            key={`small-star-${i}`}
+            className="absolute rounded-full bg-white opacity-70"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${1 + Math.random() * 2}px`,
+              height: `${1 + Math.random() * 2}px`,
+              transform: `translateY(${scrollY * (0.05 + i * 0.005)}px)`,
+            }}
+          />
+        ))}
+        
+        {/* Nebula clouds */}
+        <div className="absolute inset-0 opacity-20">
+          <div 
+            className="absolute w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+            style={{
+              left: '10%',
+              top: '20%',
+              transform: `translateY(${scrollY * 0.15}px)`,
+            }}
+          />
+          <div 
+            className="absolute w-80 h-80 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl"
+            style={{
+              right: '15%',
+              top: '60%',
+              transform: `translateY(${scrollY * 0.1}px)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content overlay */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Header */}
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-light text-slate-800 mb-6">Where to Find Adorna Design</h2>
-        <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+        <h2 className="text-4xl font-light text-white mb-6">Where to Find Adorna Design</h2>
+        <p className="text-lg text-rose-200 max-w-3xl mx-auto leading-relaxed">
           Connect with Gina and discover her latest creations at farmers markets, artisan shows, 
           and select retail partners. Each location offers a unique opportunity to experience 
           the full range of Adorna Design's handcrafted artistry.
         </p>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex justify-center mb-12">
-        <div className="bg-white/80 backdrop-blur-sm rounded-lg p-1 border border-slate-200 shadow-sm">
-          <Button
-            variant={activeTab === 'markets' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('markets')}
-            className="font-medium"
-          >
-            <Calendar className="w-4 h-4 mr-2" />
-            Markets & Events
-          </Button>
-          <Button
-            variant={activeTab === 'stores' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('stores')}
-            className="font-medium"
-          >
-            <Store className="w-4 h-4 mr-2" />
-            Retail Partners
-          </Button>
+
+      {/* Schedule Appointment - Always Visible */}
+      <div className="space-y-8">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-light text-white mb-4">Schedule an Appointment</h3>
+          <p className="text-rose-200 mb-6">
+            Book a consultation with Gina to discuss custom commissions, private showings, or therapeutic plant consultations.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex items-center space-x-2 text-white">
+              <Phone className="w-4 h-4" />
+              <a href="tel:843-408-3362" className="hover:text-rose-200 transition-colors">843-408-3362</a>
+            </div>
+            <div className="flex items-center space-x-2 text-white">
+              <Mail className="w-4 h-4" />
+              <a href="mailto:gina@adornadesign.art" className="hover:text-rose-200 transition-colors">gina@adornadesign.art</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+            <form className="space-y-6" onSubmit={(e) => {
+              e.preventDefault();
+              setIsSubmitting(true);
+              // Simulate form submission - in real implementation, this would send an email
+              setTimeout(() => {
+                setIsSubmitting(false);
+                setSubmitStatus('success');
+                // Reset form
+                setAppointmentForm({
+                  name: '',
+                  email: '',
+                  phone: '',
+                  preferredDate: '',
+                  preferredTime: '',
+                  serviceType: '',
+                  message: ''
+                });
+                setTimeout(() => setSubmitStatus('idle'), 3000);
+              }, 1000);
+            }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    <User className="w-4 h-4 inline mr-2" />
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={appointmentForm.name}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, name: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2"
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    <Mail className="w-4 h-4 inline mr-2" />
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    value={appointmentForm.email}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, email: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2"
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    <Phone className="w-4 h-4 inline mr-2" />
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    value={appointmentForm.phone}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, phone: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2"
+                    placeholder="(843) 555-0123"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    <Calendar className="w-4 h-4 inline mr-2" />
+                    Preferred Date
+                  </label>
+                  <input
+                    type="date"
+                    value={appointmentForm.preferredDate}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, preferredDate: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white rounded-md px-3 py-2"
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    <Clock className="w-4 h-4 inline mr-2" />
+                    Preferred Time
+                  </label>
+                  <select
+                    value={appointmentForm.preferredTime}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, preferredTime: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white rounded-md px-3 py-2"
+                  >
+                    <option value="" className="text-black">Select time</option>
+                    <option value="morning" className="text-black">Morning (9 AM - 12 PM)</option>
+                    <option value="afternoon" className="text-black">Afternoon (12 PM - 5 PM)</option>
+                    <option value="evening" className="text-black">Evening (5 PM - 7 PM)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Service Type
+                  </label>
+                  <select
+                    value={appointmentForm.serviceType}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, serviceType: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white rounded-md px-3 py-2"
+                  >
+                    <option value="" className="text-black">Select service</option>
+                    <option value="custom-jewelry" className="text-black">Custom Jewelry Commission</option>
+                    <option value="private-showing" className="text-black">Private Jewelry Showing</option>
+                    <option value="plant-consultation" className="text-black">Therapeutic Plant Consultation</option>
+                    <option value="custom-furniture" className="text-black">Custom Furniture Design</option>
+                    <option value="stained-glass" className="text-black">Stained Glass Project</option>
+                    <option value="garden-design" className="text-black">Garden Design Consultation</option>
+                    <option value="other" className="text-black">Other</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">
+                  <MessageSquare className="w-4 h-4 inline mr-2" />
+                  Message
+                </label>
+                <textarea
+                  value={appointmentForm.message}
+                  onChange={(e) => setAppointmentForm({...appointmentForm, message: e.target.value})}
+                  className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2 h-24 resize-none"
+                  placeholder="Tell Gina about your project or what you'd like to discuss..."
+                />
+              </div>
+
+              {submitStatus === 'success' && (
+                <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-lg p-4 text-emerald-200">
+                  Thank you! Your appointment request has been sent. Gina will contact you within 24 hours.
+                </div>
+              )}
+
+              <Button 
+                type="submit" 
+                disabled={isSubmitting || !appointmentForm.name || !appointmentForm.email}
+                className="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3"
+              >
+                {isSubmitting ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Sending...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Send className="w-4 h-4" />
+                    <span>Send Appointment Request</span>
+                  </div>
+                )}
+              </Button>
+              
+              <p className="text-xs text-rose-200 text-center">
+                * This form will send an email to Gina. She typically responds within 24 hours.
+              </p>
+            </form>
+          </div>
+          
+          {/* Farmers Market Calendar */}
+          <div className="mt-12 bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+            <h4 className="text-xl font-light text-white mb-6 text-center">Upcoming Farmers Markets & Events</h4>
+            <div className="text-center space-y-4">
+              <div className="bg-amber-500/20 border border-amber-400/30 rounded-lg p-4">
+                <Calendar className="w-8 h-8 text-amber-300 mx-auto mb-2" />
+                <h5 className="font-medium text-white mb-2">Market Schedule</h5>
+                <p className="text-amber-200 text-sm">
+                  Market dates and locations are currently being finalized for the 2025 season.
+                </p>
+                <p className="text-amber-200 text-sm mt-2">
+                  <strong>TBD - Coming Soon!</strong>
+                </p>
+              </div>
+              <p className="text-rose-200 text-sm">
+                Check back soon or schedule an appointment above to be notified of upcoming market appearances.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Markets & Events Tab */}
-      {activeTab === 'markets' && (
+      {/* Hidden Markets & Events Content - keeping for future use */}
+      {false && (
         <div className="space-y-8">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-light text-slate-800 mb-4">Upcoming Markets & Events</h3>
-            <p className="text-slate-600">
+            <h3 className="text-2xl font-light text-white mb-4">Upcoming Markets & Events</h3>
+            <p className="text-rose-200">
               Visit Gina at these upcoming markets to see the latest collections and meet the artist behind the work.
             </p>
           </div>
@@ -257,12 +520,12 @@ export default function WhereToFind() {
         </div>
       )}
 
-      {/* Retail Partners Tab */}
-      {activeTab === 'stores' && (
+      {/* Hidden Retail Partners Content - keeping for future use */}
+      {false && (
         <div className="space-y-8">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-light text-slate-800 mb-4">Retail Partners</h3>
-            <p className="text-slate-600">
+            <h3 className="text-2xl font-light text-white mb-4">Retail Partners</h3>
+            <p className="text-rose-200">
               Find Adorna Design products at these carefully selected retail partners who share our commitment to quality and artistry.
             </p>
           </div>
@@ -336,26 +599,290 @@ export default function WhereToFind() {
         </div>
       )}
 
+      {/* Hidden Appointment Content - keeping for future use */}
+      {false && (
+        <div className="space-y-8">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-light text-white mb-4">Schedule an Appointment</h3>
+            <p className="text-rose-200 mb-6">
+              Book a consultation with Gina to discuss custom commissions, private showings, or therapeutic plant consultations.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="flex items-center space-x-2 text-white">
+                <Phone className="w-4 h-4" />
+                <a href="tel:843-408-3362" className="hover:text-rose-200 transition-colors">843-408-3362</a>
+              </div>
+              <div className="flex items-center space-x-2 text-white">
+                <Mail className="w-4 h-4" />
+                <a href="mailto:gina@adornadesign.art" className="hover:text-rose-200 transition-colors">gina@adornadesign.art</a>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+              <form className="space-y-6" onSubmit={(e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                // Simulate form submission - in real implementation, this would send an email
+                setTimeout(() => {
+                  setIsSubmitting(false);
+                  setSubmitStatus('success');
+                  // Reset form
+                  setAppointmentForm({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    preferredDate: '',
+                    preferredTime: '',
+                    serviceType: '',
+                    message: ''
+                  });
+                  setTimeout(() => setSubmitStatus('idle'), 3000);
+                }, 1000);
+              }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      <User className="w-4 h-4 inline mr-2" />
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={appointmentForm.name}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, name: e.target.value})}
+                      className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2"
+                      placeholder="Your name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      <Mail className="w-4 h-4 inline mr-2" />
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      value={appointmentForm.email}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, email: e.target.value})}
+                      className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2"
+                      placeholder="your@email.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={appointmentForm.phone}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, phone: e.target.value})}
+                      className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2"
+                      placeholder="(843) 555-0123"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      <Calendar className="w-4 h-4 inline mr-2" />
+                      Preferred Date
+                    </label>
+                    <input
+                      type="date"
+                      value={appointmentForm.preferredDate}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, preferredDate: e.target.value})}
+                      className="w-full bg-white/10 border border-white/30 text-white rounded-md px-3 py-2"
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      <Clock className="w-4 h-4 inline mr-2" />
+                      Preferred Time
+                    </label>
+                    <select
+                      value={appointmentForm.preferredTime}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, preferredTime: e.target.value})}
+                      className="w-full bg-white/10 border border-white/30 text-white rounded-md px-3 py-2"
+                    >
+                      <option value="" className="text-black">Select time</option>
+                      <option value="morning" className="text-black">Morning (9 AM - 12 PM)</option>
+                      <option value="afternoon" className="text-black">Afternoon (12 PM - 5 PM)</option>
+                      <option value="evening" className="text-black">Evening (5 PM - 7 PM)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Service Type
+                    </label>
+                    <select
+                      value={appointmentForm.serviceType}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, serviceType: e.target.value})}
+                      className="w-full bg-white/10 border border-white/30 text-white rounded-md px-3 py-2"
+                    >
+                      <option value="" className="text-black">Select service</option>
+                      <option value="custom-jewelry" className="text-black">Custom Jewelry Commission</option>
+                      <option value="private-showing" className="text-black">Private Jewelry Showing</option>
+                      <option value="plant-consultation" className="text-black">Therapeutic Plant Consultation</option>
+                      <option value="custom-furniture" className="text-black">Custom Furniture Design</option>
+                      <option value="stained-glass" className="text-black">Stained Glass Project</option>
+                      <option value="garden-design" className="text-black">Garden Design Consultation</option>
+                      <option value="other" className="text-black">Other</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    <MessageSquare className="w-4 h-4 inline mr-2" />
+                    Message
+                  </label>
+                  <textarea
+                    value={appointmentForm.message}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, message: e.target.value})}
+                    className="w-full bg-white/10 border border-white/30 text-white placeholder-white/60 rounded-md px-3 py-2 h-24 resize-none"
+                    placeholder="Tell Gina about your project or what you'd like to discuss..."
+                  />
+                </div>
+
+                {submitStatus === 'success' && (
+                  <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-lg p-4 text-emerald-200">
+                    Thank you! Your appointment request has been sent. Gina will contact you within 24 hours.
+                  </div>
+                )}
+
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting || !appointmentForm.name || !appointmentForm.email}
+                  className="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Sending...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Send className="w-4 h-4" />
+                      <span>Send Appointment Request</span>
+                    </div>
+                  )}
+                </Button>
+                
+                <p className="text-xs text-rose-200 text-center">
+                  * This form will send an email to Gina. She typically responds within 24 hours.
+                </p>
+              </form>
+            </div>
+            
+            {/* Farmers Market Calendar */}
+            <div className="mt-12 bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+              <h4 className="text-xl font-light text-white mb-6 text-center">Upcoming Farmers Markets & Events</h4>
+              <div className="text-center space-y-4">
+                <div className="bg-amber-500/20 border border-amber-400/30 rounded-lg p-4">
+                  <Calendar className="w-8 h-8 text-amber-300 mx-auto mb-2" />
+                  <h5 className="font-medium text-white mb-2">Market Schedule</h5>
+                  <p className="text-amber-200 text-sm">
+                    Market dates and locations are currently being finalized for the 2025 season.
+                  </p>
+                  <p className="text-amber-200 text-sm mt-2">
+                    <strong>TBD - Coming Soon!</strong>
+                  </p>
+                </div>
+                <p className="text-rose-200 text-sm">
+                  Check back soon or schedule an appointment above to be notified of upcoming market appearances.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Contact for Custom Orders */}
       <div className="mt-20">
-        <div className="max-w-3xl mx-auto bg-gradient-to-br from-slate-50 to-rose-50 rounded-3xl p-10 border border-slate-200 text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-slate-600 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+        <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-10 border border-white/20 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <MapPin className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-2xl font-light text-slate-800 mb-6">Custom Orders & Commissions</h3>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <h3 className="text-2xl font-light text-white mb-6">Custom Orders & Commissions</h3>
+          <p className="text-white leading-relaxed mb-6">
             Looking for something specific or want to commission a custom piece? Gina accepts custom orders 
             for jewelry, furniture, stained glass, and garden designs. Each commission is a collaborative 
             process that results in a truly unique piece of art.
           </p>
-          <p className="text-sm text-slate-600 mb-6">
+          <p className="text-sm text-rose-200 mb-6">
             Visit any market location to discuss your vision, or contact one of our retail partners 
             to arrange a consultation for larger projects.
           </p>
-          <Badge variant="outline" className="border-slate-300 text-slate-600">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+            <div className="flex items-center space-x-2 text-white">
+              <Phone className="w-4 h-4" />
+              <a href="tel:843-408-3362" className="hover:text-rose-200 transition-colors font-medium">843-408-3362</a>
+            </div>
+            <div className="flex items-center space-x-2 text-white">
+              <Mail className="w-4 h-4" />
+              <a href="mailto:gina@adornadesign.art" className="hover:text-rose-200 transition-colors font-medium">gina@adornadesign.art</a>
+            </div>
+          </div>
+          <Badge variant="outline" className="border-white/30 text-white">
             Custom orders typically take 2-6 weeks depending on complexity
           </Badge>
         </div>
+      </div>
+
+      {/* Artist Footer */}
+      <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <img 
+                src="/images/adorna_design_logo.svg" 
+                alt="Adorna Design" 
+                className="w-12 h-12"
+              />
+              <div>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-rose-300 bg-clip-text text-transparent">
+                  Adorna Design
+                </h3>
+                <p className="text-sm text-rose-200">Gina • Artisan</p>
+              </div>
+            </div>
+            <p className="text-white mb-6 max-w-md mx-auto">
+              Creating art that bridges the worlds of healing and beauty, 
+              one handcrafted piece at a time.
+            </p>
+            <div className="space-y-2">
+              <p className="text-xs text-rose-200">
+                © 2025 Adorna Design. All artistic works are original and handcrafted by Gina.
+              </p>
+              <p className="text-xs text-rose-200">
+                Photography by Danielle Osfalg - Thank you for capturing the beauty of these handcrafted pieces.
+              </p>
+              <p className="text-xs text-rose-300">
+                Website crafted with ❤️ by{' '}
+                <a 
+                  href="https://magicunicorn.tech" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Magic Unicorn Unconventional Technology & Stuff Inc
+                </a>
+                {' '}using{' '}
+                <a 
+                  href="https://unicorncommander.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Unicorn Commander UC-1
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
       </div>
     </div>
   );

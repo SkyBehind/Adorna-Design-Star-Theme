@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Palette, Home, Flower, Lightbulb, Hammer, TreePine, Search, Grid } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -20,6 +20,13 @@ interface Craft {
 export default function OtherCrafts() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Sample craft data - would come from data source
   const crafts: Craft[] = [
@@ -112,11 +119,79 @@ export default function OtherCrafts() {
   const otherCrafts = filteredCrafts.filter(craft => !craft.featured);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Starfield Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 -z-10">
+        {/* Scroll-based starfield */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute rounded-full bg-white opacity-95 shadow-white shadow-sm"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${4 + Math.random() * 4}px`,
+              height: `${4 + Math.random() * 4}px`,
+              transform: `translateY(${scrollY * (0.2 + i * 0.02)}px)`,
+            }}
+          />
+        ))}
+        
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={`medium-star-${i}`}
+            className="absolute rounded-full bg-white opacity-85"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              transform: `translateY(${scrollY * (0.1 + i * 0.01)}px)`,
+            }}
+          />
+        ))}
+        
+        {[...Array(40)].map((_, i) => (
+          <div
+            key={`small-star-${i}`}
+            className="absolute rounded-full bg-white opacity-70"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${1 + Math.random() * 2}px`,
+              height: `${1 + Math.random() * 2}px`,
+              transform: `translateY(${scrollY * (0.05 + i * 0.005)}px)`,
+            }}
+          />
+        ))}
+        
+        {/* Nebula clouds */}
+        <div className="absolute inset-0 opacity-20">
+          <div 
+            className="absolute w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+            style={{
+              left: '10%',
+              top: '20%',
+              transform: `translateY(${scrollY * 0.15}px)`,
+            }}
+          />
+          <div 
+            className="absolute w-80 h-80 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl"
+            style={{
+              right: '15%',
+              top: '60%',
+              transform: `translateY(${scrollY * 0.1}px)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content overlay */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Header */}
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-light text-slate-800 mb-6">Other Crafts & Creations</h2>
-        <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+        <h2 className="text-4xl font-light text-white mb-6">Other Crafts & Creations</h2>
+        <p className="text-lg text-rose-200 max-w-3xl mx-auto leading-relaxed">
           Beyond jewelry and skincare, Gina's artistic vision extends into multiple mediums—
           from luminous stained glass to custom furniture, from healing garden designs to 
           therapeutic plant collections. Each craft reflects the same intention: to create 
@@ -158,7 +233,7 @@ export default function OtherCrafts() {
       {/* Featured Crafts */}
       {featuredCrafts.length > 0 && (
         <div className="mb-16">
-          <h3 className="text-2xl font-light text-slate-800 mb-8 text-center">Featured Works</h3>
+          <h3 className="text-2xl font-light text-white mb-8 text-center">Featured Works</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {featuredCrafts.map((craft) => (
               <Card key={craft.id} className="group overflow-hidden bg-white/90 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-500 hover:shadow-2xl">
@@ -224,7 +299,7 @@ export default function OtherCrafts() {
       {otherCrafts.length > 0 && (
         <div>
           {featuredCrafts.length > 0 && (
-            <h3 className="text-2xl font-light text-slate-800 mb-8 text-center">Additional Works</h3>
+            <h3 className="text-2xl font-light text-white mb-8 text-center">Additional Works</h3>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {otherCrafts.map((craft) => (
@@ -288,8 +363,8 @@ export default function OtherCrafts() {
           <div className="w-20 h-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
             <Palette className="w-10 h-10 text-slate-400" />
           </div>
-          <h3 className="text-xl font-medium text-slate-800 mb-3">No crafts found</h3>
-          <p className="text-slate-600 mb-6 max-w-md mx-auto">
+          <h3 className="text-xl font-medium text-white mb-3">No crafts found</h3>
+          <p className="text-rose-200 mb-6 max-w-md mx-auto">
             Try adjusting your search terms or explore different categories to discover more of Gina's diverse artistic work.
           </p>
           <Button
@@ -307,25 +382,26 @@ export default function OtherCrafts() {
 
       {/* Multi-Media Philosophy */}
       <div className="mt-20">
-        <div className="max-w-3xl mx-auto bg-gradient-to-br from-slate-50 to-rose-50 rounded-3xl p-10 border border-slate-200">
+        <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-10 border border-white/20">
           <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-slate-600 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <div className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Palette className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-2xl font-light text-slate-800 mb-6">Multi-Media Artistry</h3>
-            <p className="text-slate-700 leading-relaxed mb-6">
+            <h3 className="text-2xl font-light text-white mb-6">Multi-Media Artistry</h3>
+            <p className="text-white leading-relaxed mb-6">
               "Art doesn't live in just one medium—it flows wherever there's an opportunity to create beauty 
               and meaning. Whether I'm cutting glass, shaping wood, or designing a garden, the same healing 
               intention guides every project. Each medium teaches me something new about the intersection 
               of function and beauty."
             </p>
-            <p className="text-sm text-slate-600 italic">
+            <p className="text-sm text-rose-200 italic">
               From the precision required in stained glass to the patience needed for growing plants, 
               every craft informs and enriches the others, creating a holistic approach to artistic expression.
             </p>
-            <p className="text-xs text-slate-500 mt-4 font-medium">— Gina</p>
+            <p className="text-xs text-rose-300 mt-4 font-medium">— Gina</p>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

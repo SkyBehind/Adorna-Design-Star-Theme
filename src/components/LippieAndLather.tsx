@@ -26,6 +26,13 @@ export default function LippieAndLather() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const loadSoapProducts = async () => {
@@ -103,7 +110,77 @@ export default function LippieAndLather() {
   };
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-6">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Starfield Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 -z-10">
+        {/* Scroll-based starfield */}
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute rounded-full bg-white opacity-95 shadow-white shadow-sm"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${4 + Math.random() * 4}px`,
+              height: `${4 + Math.random() * 4}px`,
+              transform: `translateY(${scrollY * (0.2 + i * 0.02)}px)`,
+              filter: 'brightness(1.2)',
+            }}
+          />
+        ))}
+        
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={`medium-star-${i}`}
+            className="absolute rounded-full bg-white opacity-85"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              transform: `translateY(${scrollY * (0.1 + i * 0.01)}px)`,
+              filter: 'brightness(1.1)',
+            }}
+          />
+        ))}
+        
+        {[...Array(40)].map((_, i) => (
+          <div
+            key={`small-star-${i}`}
+            className="absolute rounded-full bg-white opacity-70"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${1 + Math.random() * 2}px`,
+              height: `${1 + Math.random() * 2}px`,
+              transform: `translateY(${scrollY * (0.05 + i * 0.005)}px)`,
+            }}
+          />
+        ))}
+        
+        {/* Nebula clouds */}
+        <div className="absolute inset-0 opacity-20">
+          <div 
+            className="absolute w-96 h-96 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-full blur-3xl"
+            style={{
+              left: '10%',
+              top: '20%',
+              transform: `translateY(${scrollY * 0.15}px)`,
+            }}
+          />
+          <div 
+            className="absolute w-80 h-80 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl"
+            style={{
+              right: '15%',
+              top: '60%',
+              transform: `translateY(${scrollY * 0.1}px)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content overlay */}
+      <div className="relative z-10 container mx-auto py-12 px-4 md:px-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <div className="flex items-center gap-4 mb-2">
@@ -112,9 +189,9 @@ export default function LippieAndLather() {
               alt="Lippie & Lather" 
               className="w-12 h-12 md:w-16 md:h-16"
             />
-            <h2 className="text-3xl font-bold text-teal-800">Lippie & Lather</h2>
+            <h2 className="text-3xl font-bold text-white">Lippie & Lather</h2>
           </div>
-          <p className="text-slate-600">
+          <p className="text-emerald-200">
             Handcrafted soaps and lip balms made with all-natural ingredients
           </p>
         </div>
@@ -258,24 +335,78 @@ export default function LippieAndLather() {
 
       {/* Lippie & Lather Philosophy */}
       <div className="mt-20">
-        <div className="max-w-3xl mx-auto bg-gradient-to-br from-teal-50 to-emerald-50 rounded-3xl p-10 border border-teal-200">
+        <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-10 border border-white/20">
           <div className="text-center">
             <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Heart className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-2xl font-light text-slate-800 mb-6">The Lippie & Lather Philosophy</h3>
-            <p className="text-slate-700 leading-relaxed mb-6">
+            <h3 className="text-2xl font-light text-white mb-6">The Lippie & Lather Philosophy</h3>
+            <p className="text-white leading-relaxed mb-6">
               "Just as I've spent decades caring for others' bodies in the ICU, these products are created 
               with the same intention of healing and nurturing. Every ingredient is chosen for its beneficial 
               properties, every scent designed to uplift the spirit."
             </p>
-            <p className="text-sm text-slate-600 italic">
+            <p className="text-sm text-emerald-200 italic">
               Each bar of soap and tube of lip balm is hand-poured in small batches, ensuring quality 
               and freshness while maintaining the personal touch that makes Lippie & Lather special.
             </p>
-            <p className="text-xs text-slate-500 mt-4 font-medium">— Gina</p>
+            <p className="text-xs text-emerald-300 mt-4 font-medium">— Gina</p>
           </div>
         </div>
+      </div>
+
+      {/* Artist Footer */}
+      <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <img 
+                src="/images/adorna_design_logo.svg" 
+                alt="Adorna Design" 
+                className="w-12 h-12"
+              />
+              <div>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-rose-300 bg-clip-text text-transparent">
+                  Adorna Design
+                </h3>
+                <p className="text-sm text-rose-200">Gina • Artisan</p>
+              </div>
+            </div>
+            <p className="text-white mb-6 max-w-md mx-auto">
+              Creating art that bridges the worlds of healing and beauty, 
+              one handcrafted piece at a time.
+            </p>
+            <div className="space-y-2">
+              <p className="text-xs text-rose-200">
+                © 2025 Adorna Design. All artistic works are original and handcrafted by Gina.
+              </p>
+              <p className="text-xs text-rose-200">
+                Photography by Danielle Osfalg - Thank you for capturing the beauty of these handcrafted pieces.
+              </p>
+              <p className="text-xs text-rose-300">
+                Website crafted with ❤️ by{' '}
+                <a 
+                  href="https://magicunicorn.tech" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Magic Unicorn Unconventional Technology & Stuff Inc
+                </a>
+                {' '}using{' '}
+                <a 
+                  href="https://unicorncommander.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-rose-200 hover:text-white transition-colors"
+                >
+                  Unicorn Commander UC-1
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
       </div>
     </div>
   );

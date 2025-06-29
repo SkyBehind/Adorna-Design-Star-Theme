@@ -60,7 +60,7 @@ export async function loadEarrings() {
       return "Signature Collection";
     };
 
-    // Define images to exclude (specific product names)
+    // Define images to exclude (specific product names) - all lowercase to match filtering logic
     const excludedImages = [
       'brown_orange_red_white_earrings.jpg',
       'black_blue_green_pink_earrings.jpg', 
@@ -68,7 +68,28 @@ export async function loadEarrings() {
       'black_silver_earrings_1.jpg',
       'black_gold_silver_earrings.jpg',
       'black_gold_silver_earrings_1.jpg',
-      'black_earrings.jpg'
+      'black_earrings.jpg',
+      // Additional earring images to exclude
+      'silver_purple_shell_jellyfish_earrings.jpg',
+      'bead_black_blue_white_earrings.jpg',
+      'black_blue_white_earrings.jpg',
+      'black_blue_crystal_white_earrings.jpg',
+      'black_blue_white_earrings_1.jpg',
+      'blue_gold_white_earrings.jpg',
+      'blue_crystal_gold_white_earrings.jpg',
+      'black_blue_crystal_green_white_earrings.jpg',
+      'black_blue_earrings.jpg',
+      'black_blue_earrings_1.jpg',
+      'black_blue_earrings_2.jpg',
+      'black_blue_earrings_3.jpg',
+      'black_blue_silver_earrings.jpg',
+      'blue_gold_purple_earrings.jpg',
+      'purple_silver_earrings.jpg',
+      'gold_pink_purple_silver_earrings.jpg',
+      'gold_pink_white_earrings.jpg',
+      'pink_white_earrings.jpg',
+      'pink_silver_white_earrings.jpg',
+      'blue_green_crystal_cube_earrings.jpg'
     ];
 
     // Filter and process data
