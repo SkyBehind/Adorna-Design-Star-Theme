@@ -220,7 +220,7 @@ export default function WhereToFind() {
         <div className="text-center mb-8">
           <h3 className="text-2xl font-light text-white mb-4">Schedule an Appointment</h3>
           <p className="text-rose-200 mb-6">
-            Book a consultation with Gina to discuss custom commissions, private showings, or therapeutic plant consultations.
+            Visit the Studio with Gina to browse the collection and explore options for custom orders.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <div className="flex items-center space-x-2 text-white">
@@ -799,37 +799,6 @@ export default function WhereToFind() {
         </div>
       )}
 
-      {/* Contact for Custom Orders */}
-      <div className="mt-20">
-        <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-10 border border-white/20 text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <MapPin className="w-8 h-8 text-white" />
-          </div>
-          <h3 className="text-2xl font-light text-white mb-6">Custom Orders & Commissions</h3>
-          <p className="text-white leading-relaxed mb-6">
-            Looking for something specific or want to commission a custom piece? Gina accepts custom orders 
-            for jewelry, furniture, stained glass, and garden designs. Each commission is a collaborative 
-            process that results in a truly unique piece of art.
-          </p>
-          <p className="text-sm text-rose-200 mb-6">
-            Visit any market location to discuss your vision, or contact one of our retail partners 
-            to arrange a consultation for larger projects.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
-            <div className="flex items-center space-x-2 text-white">
-              <Phone className="w-4 h-4" />
-              <a href="tel:843-408-3362" className="hover:text-rose-200 transition-colors font-medium">843-408-3362</a>
-            </div>
-            <div className="flex items-center space-x-2 text-white">
-              <Mail className="w-4 h-4" />
-              <a href="mailto:gina@adornadesign.art" className="hover:text-rose-200 transition-colors font-medium">gina@adornadesign.art</a>
-            </div>
-          </div>
-          <Badge variant="outline" className="border-white/30 text-white">
-            Custom orders typically take 2-6 weeks depending on complexity
-          </Badge>
-        </div>
-      </div>
 
       {/* Artist Footer */}
       <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">

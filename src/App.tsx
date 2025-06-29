@@ -452,7 +452,13 @@ function App() {
               {carouselSections.map((section, index) => (
                 <button
                   key={section.id}
-                  onClick={() => goToSection(index)}
+                  onClick={() => {
+                    if (section.id === 'about' || section.id === 'wheretofind') {
+                      enterSection(section.id);
+                    } else {
+                      goToSection(index);
+                    }
+                  }}
                   className={`group transition-all duration-500 px-6 py-4 rounded-2xl border-2 backdrop-blur-sm ${
                     index === currentSection 
                       ? `${getWarmBackdrop(section.id)} border-white/70` 
@@ -693,7 +699,13 @@ function App() {
               {carouselSections.map((section, index) => (
                 <button
                   key={section.id}
-                  onClick={() => goToSection(index)}
+                  onClick={() => {
+                    if (section.id === 'about' || section.id === 'wheretofind') {
+                      enterSection(section.id);
+                    } else {
+                      goToSection(index);
+                    }
+                  }}
                   className={`p-4 rounded-2xl text-center transition-all duration-300 min-h-[72px] flex flex-col justify-center border-2 ${
                     index === currentSection 
                       ? 'bg-white text-black shadow-xl border-white' 
