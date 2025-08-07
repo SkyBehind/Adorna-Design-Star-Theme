@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Search, Sparkles } from 'lucide-react';
+import { Search, Sparkles, X, ZoomIn, Heart, ChevronLeft, ChevronRight, Palette, Filter } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { loadEarrings } from '../utils/loadEarrings';
 
 interface Artwork {
@@ -23,17 +24,97 @@ export default function Gallery() {
   const [displayedArtworks, setDisplayedArtworks] = useState<Artwork[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCollection, setSelectedCollection] = useState<string>('all');
+  const [selectedColor, setSelectedColor] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
   const [scrollY, setScrollY] = useState(0);
+  
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Enhanced color extraction from filenames, titles, and materials
+  const extractColors = (artwork: Artwork): string[] => {
+    const text = `${artwork.filename} ${artwork.title} ${artwork.materials}`.toLowerCase();
+    const colors = [];
+    
+    // More comprehensive color detection
+    if (text.includes('black')) colors.push('black');
+    if (text.includes('white')) colors.push('white');
+    if (text.includes('silver') || text.includes('metal')) colors.push('silver');
+    if (text.includes('gold') || text.includes('brass')) colors.push('gold');
+    if (text.includes('blue')) colors.push('blue');
+    if (text.includes('red') || text.includes('rose')) colors.push('red');
+    if (text.includes('green') || text.includes('emerald')) colors.push('green');
+    if (text.includes('purple') || text.includes('violet')) colors.push('purple');
+    if (text.includes('pink')) colors.push('pink');
+    if (text.includes('brown') || text.includes('copper') || text.includes('leather') || text.includes('wood')) colors.push('brown');
+    if (text.includes('orange')) colors.push('orange');
+    if (text.includes('yellow')) colors.push('yellow');
+    if (text.includes('bead') && !colors.length) colors.push('multicolor'); // Default for beaded items
+    
+    // If no colors detected, add 'natural' for items with natural materials
+    if (colors.length === 0 && (text.includes('shell') || text.includes('stone') || text.includes('natural'))) {
+      colors.push('natural');
+    }
+    
+    return colors;
+  };
+
+  // Lightbox functions
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const nextImage = () => {
+    setLightboxIndex((prev) => (prev + 1) % filteredArtworks.length);
+  };
+
+  const prevImage = () => {
+    setLightboxIndex((prev) => (prev - 1 + filteredArtworks.length) % filteredArtworks.length);
+  };
+
+  const toggleFavorite = (filename: string) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(filename)) {
+        newFavorites.delete(filename);
+      } else {
+        newFavorites.add(filename);
+      }
+      return newFavorites;
+    });
+  };
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxOpen, filteredArtworks.length]);
 
   // Helper function to organize artworks into collections (commented out as not currently used)
   // const getCollectionFromMaterial = (material: string): string => {
@@ -95,7 +176,7 @@ export default function Gallery() {
   }, []);
 
   useEffect(() => {
-    // Filter artworks based on search term and selected collection
+    // Filter artworks based on search term, selected collection, and color
     let filtered = [...artworks];
 
     if (searchTerm) {
@@ -113,9 +194,16 @@ export default function Gallery() {
       );
     }
 
+    if (selectedColor !== 'all') {
+      filtered = filtered.filter(artwork => {
+        const colors = extractColors(artwork);
+        return colors.includes(selectedColor);
+      });
+    }
+
     setFilteredArtworks(filtered);
     setCurrentPage(1); // Reset to first page when filter changes
-  }, [searchTerm, selectedCollection, artworks]);
+  }, [searchTerm, selectedCollection, selectedColor, artworks]);
 
   // Update displayed artworks based on pagination
   useEffect(() => {
@@ -133,8 +221,29 @@ export default function Gallery() {
     }
   };
 
-  // Get unique collections for the filter
+  // Get unique collections and colors for the filters
   const collections = ['all', ...new Set(artworks.map(artwork => artwork.collection))];
+  const allColors = artworks.flatMap(artwork => extractColors(artwork));
+  const uniqueColors = ['all', ...new Set(allColors)];
+  
+  // Enhanced color display mapping
+  const colorDisplay: Record<string, { name: string; bgColor: string; textColor: string }> = {
+    'all': { name: 'All Colors', bgColor: 'bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500', textColor: 'text-white' },
+    'black': { name: 'Black', bgColor: 'bg-black', textColor: 'text-white' },
+    'white': { name: 'White', bgColor: 'bg-white border border-gray-400', textColor: 'text-black' },
+    'silver': { name: 'Silver', bgColor: 'bg-gray-400', textColor: 'text-white' },
+    'gold': { name: 'Gold', bgColor: 'bg-yellow-500', textColor: 'text-yellow-900' },
+    'blue': { name: 'Blue', bgColor: 'bg-blue-500', textColor: 'text-white' },
+    'red': { name: 'Red', bgColor: 'bg-red-500', textColor: 'text-white' },
+    'green': { name: 'Green', bgColor: 'bg-green-500', textColor: 'text-white' },
+    'purple': { name: 'Purple', bgColor: 'bg-purple-500', textColor: 'text-white' },
+    'pink': { name: 'Pink', bgColor: 'bg-pink-400', textColor: 'text-white' },
+    'brown': { name: 'Brown', bgColor: 'bg-amber-700', textColor: 'text-white' },
+    'orange': { name: 'Orange', bgColor: 'bg-orange-500', textColor: 'text-white' },
+    'yellow': { name: 'Yellow', bgColor: 'bg-yellow-400', textColor: 'text-yellow-900' },
+    'multicolor': { name: 'Multicolor', bgColor: 'bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400', textColor: 'text-white' },
+    'natural': { name: 'Natural', bgColor: 'bg-stone-500', textColor: 'text-white' },
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -223,29 +332,99 @@ export default function Gallery() {
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-            <Input
-              placeholder="Search artworks..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-full sm:w-auto min-w-[150px] max-w-full text-sm"
-            />
+        {/* Improved Filter System */}
+        <div className="bg-black/40 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-2xl">
+          {/* Search and Clear */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-white" />
+              <Input
+                placeholder="Search by name, materials, or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-full bg-white/20 border-white/40 text-white placeholder-white/70 focus:border-white/60 focus:bg-white/25"
+              />
+            </div>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCollection('all');
+                setSelectedColor('all');
+              }}
+              className="text-black bg-white/90 border-white hover:bg-white hover:text-black shrink-0 font-medium"
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              Clear Filters
+            </Button>
           </div>
-          
-          <div className="flex overflow-x-auto no-scrollbar space-x-2 pb-1">
-            {collections.map((collection) => (
-              <Button
-                key={collection}
-                variant={selectedCollection === collection ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCollection(collection)}
-                className="whitespace-nowrap text-xs sm:text-sm"
-              >
-                {collection === 'all' ? 'All Collections' : collection}
-              </Button>
-            ))}
+
+          {/* Filter Results Summary */}
+          <div className="mb-4">
+            <p className="text-sm text-white font-medium">
+              Showing <span className="text-yellow-300">{filteredArtworks.length}</span> of {artworks.length} pieces
+              {searchTerm && <span className="text-rose-300"> matching "{searchTerm}"</span>}
+              {selectedCollection !== 'all' && <span className="text-blue-300"> in {selectedCollection}</span>}
+              {selectedColor !== 'all' && <span className="text-green-300"> with {colorDisplay[selectedColor]?.name || selectedColor} colors</span>}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Collection Filter */}
+            <div className="space-y-3">
+              <h4 className="text-base font-bold text-white flex items-center">
+                <Sparkles className="w-4 h-4 mr-2 text-purple-300" />
+                Collections
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {collections.map((collection) => (
+                  <Button
+                    key={collection}
+                    variant={selectedCollection === collection ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCollection(collection)}
+                    className={`text-sm font-medium transition-all ${
+                      selectedCollection === collection 
+                        ? 'bg-purple-600 text-white border-purple-400 shadow-lg shadow-purple-500/30' 
+                        : 'text-black bg-white/90 border-white hover:bg-white hover:text-black'
+                    }`}
+                  >
+                    {collection === 'all' ? '✨ All Collections' : collection}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Color Filter */}
+            <div className="space-y-3">
+              <h4 className="text-base font-bold text-white flex items-center">
+                <Palette className="w-4 h-4 mr-2 text-pink-300" />
+                Colors
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {uniqueColors.map((color) => {
+                  const displayInfo = colorDisplay[color] || { name: color, bgColor: 'bg-gray-400', textColor: 'text-white' };
+                  return (
+                    <Button
+                      key={color}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedColor(color)}
+                      className={`text-sm font-medium flex items-center gap-2 transition-all ${
+                        selectedColor === color 
+                          ? 'ring-2 ring-pink-400 border-pink-400 bg-pink-600 text-white shadow-lg shadow-pink-500/20' 
+                          : 'text-black bg-white/90 border-white hover:bg-white hover:text-black'
+                      }`}
+                    >
+                      <div className={`w-4 h-4 rounded-full ${displayInfo.bgColor} border-2 border-white/40 shadow-sm`}></div>
+                      <span>{displayInfo.name}</span>
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -272,22 +451,51 @@ export default function Gallery() {
       {/* Gallery Grid */}
       {!loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {displayedArtworks.map((artwork) => (
-          <Card key={artwork.filename} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <div className="aspect-[4/5] relative overflow-hidden">
+          {displayedArtworks.map((artwork, index) => (
+          <Card key={artwork.filename} className="overflow-hidden hover:shadow-xl transition-all duration-300 bg-white/10 border-white/20 backdrop-blur-sm">
+            <div className="aspect-[4/5] relative overflow-hidden cursor-pointer group">
               <img
                 src={artwork.image}
                 alt={artwork.title}
                 loading="lazy"
-                className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                onClick={() => openLightbox(index)}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-white text-sm font-medium">{artwork.title}</p>
-                  <p className="text-white/80 text-xs">{artwork.collection}</p>
+                  <p className="text-white text-sm font-bold">{artwork.title}</p>
+                  <p className="text-white/90 text-xs">{artwork.collection}</p>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {extractColors(artwork).map((color) => (
+                      <Badge key={color} className={`text-xs px-2 py-0.5 ${colorDisplay[color]?.bgColor || 'bg-gray-400'} ${colorDisplay[color]?.textColor || 'text-white'}`}>
+                        {colorDisplay[color]?.name || color}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
                 <div className="absolute top-4 right-4">
-                  <p className="text-white/60 text-xs">Photo: Danielle Osfalg</p>
+                  <p className="text-white/70 text-xs">Photo: Danielle Osfalg</p>
+                </div>
+                <div className="absolute top-4 left-4 flex space-x-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(artwork.filename);
+                    }}
+                    className={`p-2 rounded-full backdrop-blur-sm transition-colors ${
+                      favorites.has(artwork.filename) 
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-white/20 text-white hover:bg-white/30'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${favorites.has(artwork.filename) ? 'fill-current' : ''}`} />
+                  </button>
+                  <button
+                    onClick={() => openLightbox(index)}
+                    className="p-2 rounded-full bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm transition-colors"
+                  >
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -354,6 +562,135 @@ export default function Gallery() {
           <p className="text-xs text-rose-200 mt-4 font-medium">— Gina</p>
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {lightboxOpen && filteredArtworks.length > 0 && (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative max-w-6xl max-h-full w-full h-full flex items-center justify-center">
+            {/* Close Button */}
+            <button
+              onClick={closeLightbox}
+              className="absolute top-4 right-4 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+
+            {/* Navigation Buttons */}
+            {filteredArtworks.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors"
+                >
+                  <ChevronLeft className="w-6 h-6 text-white" />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors"
+                >
+                  <ChevronRight className="w-6 h-6 text-white" />
+                </button>
+              </>
+            )}
+
+            {/* Image and Details */}
+            <div className="flex flex-col lg:flex-row items-center gap-8 max-w-full max-h-full">
+              {/* Main Image */}
+              <div className="flex-1 flex items-center justify-center">
+                <img
+                  src={filteredArtworks[lightboxIndex]?.image}
+                  alt={filteredArtworks[lightboxIndex]?.title}
+                  className="max-w-full max-h-[70vh] lg:max-h-[80vh] object-contain rounded-lg shadow-2xl"
+                />
+              </div>
+
+              {/* Artwork Details */}
+              <div className="flex-shrink-0 max-w-md lg:max-w-sm p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        {filteredArtworks[lightboxIndex]?.title}
+                      </h3>
+                      <p className="text-rose-200 text-sm mb-1">
+                        {filteredArtworks[lightboxIndex]?.collection}
+                      </p>
+                      <p className="text-white/60 text-xs">
+                        {filteredArtworks[lightboxIndex]?.year}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => toggleFavorite(filteredArtworks[lightboxIndex]?.filename)}
+                      className={`p-2 rounded-full transition-colors ${
+                        favorites.has(filteredArtworks[lightboxIndex]?.filename) 
+                          ? 'bg-red-500 text-white' 
+                          : 'bg-white/20 text-white hover:bg-white/30'
+                      }`}
+                    >
+                      <Heart className={`w-5 h-5 ${favorites.has(filteredArtworks[lightboxIndex]?.filename) ? 'fill-current' : ''}`} />
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-1">Materials</h4>
+                      <p className="text-white/80 text-sm">
+                        {filteredArtworks[lightboxIndex]?.materials}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-1">Dimensions</h4>
+                      <p className="text-white/80 text-sm">
+                        {filteredArtworks[lightboxIndex]?.dimensions}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-2">Colors</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {extractColors(filteredArtworks[lightboxIndex]).map((color) => (
+                          <Badge key={color} className={`text-xs px-2 py-1 ${colorDisplay[color]?.bgColor || 'bg-gray-400'} ${colorDisplay[color]?.textColor || 'text-white'}`}>
+                            {colorDisplay[color]?.name || color}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-2">Artist Statement</h4>
+                      <p className="text-white/80 text-sm leading-relaxed italic">
+                        "{filteredArtworks[lightboxIndex]?.artistStatement}"
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/20">
+                    <div className="flex flex-col space-y-2">
+                      <Button className="w-full bg-rose-500 hover:bg-rose-600 text-white">
+                        <Heart className="w-4 h-4 mr-2" />
+                        Request Custom Piece
+                      </Button>
+                      <p className="text-xs text-white/60 text-center">
+                        Photo by Danielle Osfalg
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Image Counter */}
+                  {filteredArtworks.length > 1 && (
+                    <div className="text-center">
+                      <p className="text-xs text-white/60">
+                        {lightboxIndex + 1} of {filteredArtworks.length}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Artist Footer */}
       <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-12 sm:mt-24">

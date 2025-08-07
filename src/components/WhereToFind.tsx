@@ -50,89 +50,40 @@ export default function WhereToFind() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Sample market schedule data - would come from data source
+  // Real upcoming events
   const marketSchedule: MarketSchedule[] = [
     {
-      id: 'downtown-farmers',
-      name: 'Downtown Farmers Market',
-      location: 'Main Street Plaza',
-      address: '123 Main Street, Downtown',
-      schedule: 'Every Saturday',
-      nextDate: 'January 18, 2025',
-      time: '8:00 AM - 2:00 PM',
-      description: 'Our flagship market location with the largest selection of jewelry, Lippie & Lather products, and seasonal crafts.',
-      website: 'https://downtownfarmersmarket.com',
-      phone: '(555) 123-4567',
+      id: 'charleston-horticulture',
+      name: 'Charleston Horticulture Society 25th Anniversary',
+      location: 'Charleston Horticulture Society',
+      address: 'Charleston, SC',
+      schedule: 'Special Anniversary Event',
+      nextDate: 'October 25, 2025',
+      time: 'TBA',
+      description: 'Celebrating 25 years of the Charleston Horticulture Society with garden-inspired jewelry and plant-themed collections.',
+      website: 'https://www.chashortsoc.org/blank-5',
       status: 'upcoming'
-    },
-    {
-      id: 'riverside-market',
-      name: 'Riverside Artisan Market',
-      location: 'Riverside Park',
-      address: '456 River Road, Riverside',
-      schedule: 'First Sunday of each month',
-      nextDate: 'February 2, 2025',
-      time: '10:00 AM - 4:00 PM',
-      description: 'A curated artisan market featuring handmade goods, perfect for discovering unique pieces and custom commissions.',
-      website: 'https://riversideartisans.org',
-      status: 'regular'
-    },
-    {
-      id: 'spring-festival',
-      name: 'Spring Garden Festival',
-      location: 'Community Gardens',
-      address: '789 Garden Lane, Greenville',
-      schedule: 'Annual Spring Event',
-      nextDate: 'April 15-16, 2025',
-      time: '9:00 AM - 5:00 PM',
-      description: 'Special appearance at the annual garden festival, featuring plant collections and garden-inspired jewelry.',
-      status: 'seasonal'
-    },
-    {
-      id: 'holiday-bazaar',
-      name: 'Holiday Artisan Bazaar',
-      location: 'Community Center',
-      address: '321 Center Street, Midtown',
-      schedule: 'November - December',
-      nextDate: 'November 2025',
-      time: '10:00 AM - 6:00 PM',
-      description: 'Holiday shopping destination with gift sets, custom orders, and limited edition seasonal pieces.',
-      status: 'seasonal'
     }
   ];
 
-  // Sample store locations - would come from data source
-  const storeLocations: StoreLocation[] = [
+  // Recent past events
+  const pastEvents: MarketSchedule[] = [
     {
-      id: 'healing-hands-spa',
-      name: 'Healing Hands Spa & Wellness',
-      address: '555 Wellness Way, Spa District',
-      phone: '(555) 987-6543',
-      website: 'https://healinghandsspa.com',
-      description: 'Permanent display of Lippie & Lather products and select jewelry pieces in the spa retail area.',
-      displayType: 'Lippie & Lather + Select Jewelry',
-      hours: 'Mon-Sat 9AM-7PM, Sun 11AM-5PM'
-    },
-    {
-      id: 'artisan-collective',
-      name: 'The Artisan Collective',
-      address: '888 Creative Commons, Arts District',
-      phone: '(555) 456-7890',
-      website: 'https://artisancollective.com',
-      description: 'Rotating display of jewelry collections and seasonal craft pieces in this cooperative gallery space.',
-      displayType: 'Jewelry + Rotating Crafts',
-      hours: 'Tue-Sun 10AM-6PM, Closed Mondays'
-    },
-    {
-      id: 'garden-center',
-      name: 'Bloom & Grow Garden Center',
-      address: '999 Plant Paradise Road, Garden District',
-      phone: '(555) 234-5678',
-      description: 'Therapeutic plant collections and garden-inspired jewelry available in the gift shop.',
-      displayType: 'Plants + Garden Jewelry',
-      hours: 'Daily 8AM-6PM'
+      id: 'charleston-back-to-school',
+      name: 'Charleston Back to School Vendor Market',
+      location: 'Citadel Mall',
+      address: 'Charleston, SC',
+      schedule: 'Back to School Event',
+      nextDate: 'August 2-3, 2025',
+      time: 'TBA',
+      description: 'Participated in the back to school vendor market at Citadel Mall, featuring jewelry perfect for the new school year.',
+      website: 'https://www.citadelmall.net/events/charleston-back-to-school-vendor-market/',
+      status: 'upcoming'
     }
   ];
+
+  // Real store locations - to be added when available
+  const storeLocations: StoreLocation[] = [];
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -413,8 +364,8 @@ export default function WhereToFind() {
         </div>
       </div>
 
-      {/* Hidden Markets & Events Content - keeping for future use */}
-      {false && (
+      {/* Markets & Events Content */}
+      {true && (
         <div className="space-y-8">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-light text-white mb-4">Upcoming Markets & Events</h3>
@@ -598,6 +549,83 @@ export default function WhereToFind() {
           </div>
         </div>
       )}
+
+      {/* Recent Events Section */}
+      <div className="mt-16 space-y-8">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-light text-white mb-4">Recent Events</h3>
+          <p className="text-rose-200">
+            Events Gina has recently participated in - stay tuned for future appearances!
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {pastEvents.map((event) => (
+            <Card key={event.id} className="overflow-hidden bg-white/90 backdrop-blur-sm border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg opacity-75">
+              <CardContent className="p-8">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                      {event.name}
+                    </h3>
+                    <div className="flex items-center space-x-2 text-slate-600 mb-2">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">{event.location}</span>
+                    </div>
+                    <p className="text-xs text-slate-500">{event.address}</p>
+                  </div>
+                  <Badge 
+                    variant="outline"
+                    className="bg-slate-100 text-slate-600"
+                  >
+                    Completed
+                  </Badge>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-slate-500 uppercase tracking-wide font-medium mb-1">
+                        Event Type
+                      </p>
+                      <p className="text-sm text-slate-700 font-medium">{event.schedule}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 uppercase tracking-wide font-medium mb-1">
+                        Date
+                      </p>
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-slate-500" />
+                        <p className="text-sm text-slate-600 font-semibold">{event.nextDate}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-slate-500 uppercase tracking-wide font-medium mb-2">
+                      About This Event
+                    </p>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      {event.description}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {event.website && (
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={event.website} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          Event Info
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
 
       {/* Hidden Appointment Content - keeping for future use */}
       {false && (

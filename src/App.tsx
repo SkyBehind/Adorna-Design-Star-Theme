@@ -346,27 +346,56 @@ function App() {
     <div className="min-h-screen w-full bg-black"> {/* Mobile-first: remove h-screen and overflow-hidden */}
       {/* Background Section - Mobile First */}
       <div className="relative min-h-screen flex flex-col">
-        {/* Starfield Background for all sections */}
+        {/* Enhanced Starfield Background for all sections */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
-            {/* Pure white starfield for all pages */}
-            {[...Array(15)].map((_, i) => (
+            {/* Shooting stars */}
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={`shooting-star-${i}`}
+                className="shooting-star"
+                style={{
+                  width: '2px',
+                  height: '2px',
+                  animationDelay: `${i * 8 + Math.random() * 15}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                  left: `${Math.random() * 20}%`,
+                  top: `${60 + Math.random() * 20}%`,
+                }}
+              />
+            ))}
+            
+            {/* Floating particles */}
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={`particle-${i}`}
+                className="absolute w-1 h-1 bg-white/30 rounded-full floating-particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 6}s`,
+                  animationDuration: `${4 + Math.random() * 4}s`,
+                }}
+              />
+            ))}
+
+            {/* Enhanced large stars with glow */}
+            {[...Array(8)].map((_, i) => (
               <div
                 key={`main-star-${i}`}
-                className="absolute rounded-full bg-white shadow-white shadow-sm"
+                className="absolute rounded-full bg-white star-enhanced"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                   width: `${4 + Math.random() * 4}px`,
                   height: `${4 + Math.random() * 4}px`,
-                  opacity: 1, // Pure white on desktop
-                  animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite alternate`,
-                  animationDelay: `${Math.random() * 2}s`,
-                  filter: 'brightness(1.4) drop-shadow(0 0 3px white)',
+                  animationDelay: `${Math.random() * 4}s`,
+                  animationDuration: `${3 + Math.random() * 2}s`,
                 }}
               />
             ))}
             
-            {[...Array(25)].map((_, i) => (
+            {/* Medium twinkling stars */}
+            {[...Array(20)].map((_, i) => (
               <div
                 key={`main-medium-star-${i}`}
                 className="absolute rounded-full bg-white"
@@ -375,7 +404,7 @@ function App() {
                   top: `${Math.random() * 100}%`,
                   width: `${2 + Math.random() * 3}px`,
                   height: `${2 + Math.random() * 3}px`,
-                  opacity: 0.95, // Nearly pure white
+                  opacity: 0.95,
                   animation: `twinkle ${3 + Math.random() * 2}s ease-in-out infinite alternate`,
                   animationDelay: `${Math.random() * 3}s`,
                   filter: 'brightness(1.3) drop-shadow(0 0 2px white)',
@@ -383,16 +412,17 @@ function App() {
               />
             ))}
             
-            {[...Array(40)].map((_, i) => (
+            {/* Small ambient stars */}
+            {[...Array(35)].map((_, i) => (
               <div
                 key={`main-small-star-${i}`}
-                className="absolute rounded-full bg-white"
+                className="absolute rounded-full bg-white hover:scale-150 transition-transform duration-300 cursor-pointer"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                   width: `${1 + Math.random() * 2}px`,
                   height: `${1 + Math.random() * 2}px`,
-                  opacity: 0.85, // Bright white
+                  opacity: 0.7 + Math.random() * 0.3,
                   animation: `twinkle ${4 + Math.random() * 2}s ease-in-out infinite alternate`,
                   animationDelay: `${Math.random() * 4}s`,
                   filter: 'brightness(1.2)',

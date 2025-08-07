@@ -36,19 +36,31 @@ Adorna Design is a **world-class digital portfolio** showcasing the healing arti
 
 ### **🌌 Enhanced Cosmic Experience Design**
 - **Pure White Starfield**: Brilliant white stars with enhanced brightness filters and drop shadows
+- **Shooting Stars**: Animated meteors streaking across the night sky
+- **Floating Particles**: Luminous orbs drifting through space for added depth
+- **Enhanced Star Glow**: Twinkling effects with varying intensities
 - **Vibrant Gradient Navigation**: Each section features distinct, beautiful color schemes (purple-pink, blue-purple, indigo-purple, cyan-teal)
 - **Improved Contrast**: Reduced dark overlays for cleaner starfield visibility like Meet the Artist page
 - **Section-Specific Themes**: Stunning gradients with higher contrast and saturation
 - **60fps Animations**: Smooth, performant animations optimized for all devices
 
 ### **🎨 Enhanced Product Showcases**
-- **Wearable Sculptures**: Purple-pink gradient theme with automated collection organization
+- **Wearable Sculptures**: 
+  - Purple-pink gradient theme with automated collection organization
+  - Full-screen lightbox with detailed product views
+  - Advanced color and collection filtering (Beaded, Silver, Natural Elements, etc.)
+  - Favorite hearts system for customer engagement
+  - "Request Custom" buttons for personalized orders
 - **Lippie & Lather**: Enhanced with detailed ingredient displays featuring emojis and condensed layout
   - 🍯 **Lip Balm Flavors**: Apple, Grape, Strawberry, Mint
   - 🌸 **Soap Fragrances**: Rose, Jasmine, Lavender, White Tea, Linen  
   - 🌿 **Botanical Additives**: Oatmeal, Eucalyptus, Sea Salt, Chamomile, CBD, Lemongrass, Roses, Lavender
 - **Meet the Artist**: Dark indigo-purple theme with sophisticated high contrast
-- **Where to Find**: Beautiful cyan-teal gradient replacing previous dull colors
+- **Where to Find**: 
+  - Beautiful cyan-teal gradient replacing previous dull colors
+  - Real event tracking with no mock data
+  - Upcoming: Charleston Horticulture Society 25th Anniversary (Oct 25, 2025)
+  - Past Events: Charleston Back to School Vendor Market (Aug 2-3, 2025)
 - **Smart Image Filtering**: Curated portfolio with excluded items management
 
 ### **📅 Client Connection**
@@ -351,6 +363,25 @@ This is a client project for Adorna Design (Gina Stransky's artistry portfolio).
 
 ---
 
+## 📊 **Analytics**
+
+This website uses Umami Analytics, a privacy-focused, open-source analytics solution hosted at [https://analytics.magicunicorn.tech/](https://analytics.magicunicorn.tech/).
+
+### Analytics Implementation
+The tracking script is included in `index.html`:
+```html
+<script defer src="https://analytics.magicunicorn.tech/script.js" data-website-id="e520b344-71d6-437e-b5ec-41ed1513677d"></script>
+```
+
+### Privacy Features
+- No cookies used
+- GDPR compliant
+- No personal data collection
+- Respects visitor privacy
+- All data stays on our servers
+
+---
+
 ## 📜 **License & Credits**
 
 ### **Project Credits**
@@ -378,4 +409,4 @@ The starfield theme isn't just decoration—it's a metaphor for the transcendent
 
 *Built with cosmic inspiration and healing intention* 🌌💫
 
-*Last Updated: January 28, 2025 - Production Ready*
+*Last Updated: August 7, 2025 - Production Enhanced*
