@@ -1,17 +1,20 @@
 version: '3.8'
 
 services:
-  adorna-design:
-    build: .
-    container_name: adorna-design-app
-    ports:
-      - "${HOST_PORT:-6464}:6464"
-    environment:
-      - NODE_ENV=development
+  adornadesign:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: adornadesign
     restart: unless-stopped
     networks:
-      - adorna-network
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adornadesign.rule=Host(`adornadesign.art`) || Host(`www.adornadesign.art`)"
+      - "traefik.http.routers.adornadesign.entrypoints=web"
+      - "traefik.http.services.adornadesign.loadbalancer.server.port=80"
 
 networks:
-  adorna-network:
-    driver: bridge
+  web:
+    external: true
